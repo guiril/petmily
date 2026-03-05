@@ -9,7 +9,9 @@ const getMapUrl = (venue: Venue): string => {
     return `https://www.google.com/maps?q=${venue.location.lat},${venue.location.lng}`;
   }
 
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${venue.name} ${venue.address}`)}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    `${venue.name} ${venue.address}`,
+  )}`;
 };
 
 export const VenueCard = ({ venue }: VenueCardProps) => {
