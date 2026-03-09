@@ -1,7 +1,6 @@
 import type { Venue } from '@/types/venue';
 import { Header } from '@/components/Header';
-import { Sidebar } from '@/components/Sidebar';
-import { VenueCard } from '@/components/VenueCard';
+import { VenueLayout } from '@/components/VenueLayout';
 
 const mockVenues: Venue[] = [
   {
@@ -66,28 +65,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
       <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <div className="hidden md:flex">
-          <Sidebar />
-        </div>
-        <main className="flex-1 overflow-y-auto">
-          <div className="flex items-center justify-between border-b border-gray-100 bg-white px-4 py-2 md:hidden">
-            <button className="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-600">
-              篩選
-            </button>
-          </div>
-          <div className="p-4">
-            <p className="mb-3 text-xs text-gray-400">
-              共 {mockVenues.length} 筆結果
-            </p>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {mockVenues.map((venue) => (
-                <VenueCard key={venue.id} venue={venue} />
-              ))}
-            </div>
-          </div>
-        </main>
-      </div>
+      <VenueLayout venues={mockVenues} />
     </div>
   );
 }
