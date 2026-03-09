@@ -4,13 +4,21 @@ import { VenueCard } from './VenueCard';
 interface VenueListProps {
   venues: Venue[];
   totalCount: number;
+  onOpenSheet: () => void;
 }
 
-export const VenueList = ({ venues, totalCount }: VenueListProps) => {
+export const VenueList = ({
+  venues,
+  totalCount,
+  onOpenSheet,
+}: VenueListProps) => {
   return (
     <main className="flex-1 overflow-y-auto">
       <div className="flex items-center border-b border-gray-100 bg-white px-4 py-2 md:hidden">
-        <button className="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-600">
+        <button
+          onClick={onOpenSheet}
+          className="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-600"
+        >
           篩選
         </button>
       </div>

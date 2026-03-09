@@ -3,3 +3,9 @@ export interface FilterState {
   petTypes: Set<string>;
   districts: Set<string>;
 }
+
+export interface FilterCategory {
+  key: keyof FilterState;
+  title: string;
+  options: string[];
+}

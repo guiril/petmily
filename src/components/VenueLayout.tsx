@@ -1,9 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { FilterState } from '@/types/filters';
+import type { FilterCategory, FilterState } from '@/types/filters';
 import type { Venue } from '@/types/venue';
 import { filterVenues, getDistricts, toggleSetValue } from '@/lib/filter-utils';
+import { BottomSheet } from './BottomSheet';
 import { Sidebar } from './Sidebar';
 import { VenueList } from './VenueList';
 
@@ -21,11 +22,22 @@ export const VenueLayout = ({ venues }: VenueLayoutProps) => {
     districts: new Set(),
   });
 
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
   const districts = useMemo(() => getDistricts(venues), [venues]);
   const filteredVenues = useMemo(() => filterVenues(venues, selectedFilters), [
     venues,
     selectedFilters,
   ]);
+
+  const categories = useMemo<FilterCategory[]>(
+    () => [
+      { key: 'serviceTypes', title: '服務類型', options: SERVICE_TYPES },
+      { key: 'petTypes', title: '寵物種類', options: PET_TYPES },
+      { key: 'districts', title: '行政區', options: districts },
+    ],
+    [districts],
+  );
 
   const handleToggle = (category: keyof FilterState, value: string) => {
     setSelectedFilters((prev) => ({
@@ -38,14 +50,23 @@ export const VenueLayout = ({ venues }: VenueLayoutProps) => {
     <div className="flex flex-1 overflow-hidden">
       <div className="hidden md:flex">
         <Sidebar
+          categories={categories}
           selectedFilters={selectedFilters}
-          serviceTypes={SERVICE_TYPES}
-          petTypes={PET_TYPES}
-          districts={districts}
           onToggle={handleToggle}
         />
       </div>
-      <VenueList venues={filteredVenues} totalCount={venues.length} />
+      <VenueList
+        venues={filteredVenues}
+        totalCount={venues.length}
+        onOpenSheet={() => setIsSheetOpen(true)}
+      />
+      <BottomSheet
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
+        categories={categories}
+        selectedFilters={selectedFilters}
+        onToggle={handleToggle}
+      />
     </div>
   );
 };
