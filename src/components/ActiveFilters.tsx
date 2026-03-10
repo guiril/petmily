@@ -19,12 +19,12 @@ export const ActiveFilters = ({
   if (tags.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5 border-b border-stone-100 bg-white px-4 py-2">
+    <div className="flex flex-wrap items-center gap-1.5 border-b border-orange-100 bg-orange-50 px-4 py-2">
       {tags.map(({ category, value }) => (
         <button
           key={`${category}-${value}`}
           onClick={() => onRemove(category, value)}
-          className="flex cursor-pointer items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-sm text-amber-800 hover:bg-amber-200"
+          className="flex cursor-pointer items-center gap-1 rounded-full bg-orange-200 px-2.5 py-1 text-sm text-orange-800 hover:bg-orange-300"
         >
           {value}
           <span aria-hidden>×</span>
@@ -32,7 +32,7 @@ export const ActiveFilters = ({
       ))}
       <button
         onClick={onClearAll}
-        className="cursor-pointer text-sm text-stone-400 hover:text-stone-600"
+        className="cursor-pointer text-sm text-orange-400 hover:text-orange-600"
       >
         清除全部
       </button>

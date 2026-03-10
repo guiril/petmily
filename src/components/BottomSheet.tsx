@@ -35,17 +35,17 @@ export const BottomSheet = ({
     >
       {backdrop}
       <div
-        className={`absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-white p-5 transition-transform duration-300 ${
+        className={`absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-orange-50 p-5 transition-transform duration-300 ${
           isOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
         <div className="mb-4 flex items-center justify-between">
-          <span className="text-sm font-semibold text-stone-800">篩選</span>
-          <button onClick={onClose} className="text-sm text-stone-400">
+          <span className="text-sm font-semibold text-orange-900">篩選</span>
+          <button onClick={onClose} className="text-sm text-orange-400">
             關閉
           </button>
         </div>
-        <div className="flex flex-col divide-y divide-stone-100">
+        <div className="flex flex-col divide-y divide-orange-100">
           {categories.map(({ key, title, options }) => (
             <div key={key} className="py-4">
               <FilterSection

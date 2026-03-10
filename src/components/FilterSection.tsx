@@ -13,7 +13,7 @@ export const FilterSection = ({
 }: FilterSectionProps) => {
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-sm font-semibold uppercase tracking-wide text-stone-400">
+      <p className="text-sm font-semibold uppercase tracking-wide text-orange-400">
         {title}
       </p>
       <div className="flex flex-col gap-3">
@@ -26,9 +26,9 @@ export const FilterSection = ({
               type="checkbox"
               checked={selected.has(option)}
               onChange={() => onToggle(option)}
-              className="h-3.5 w-3.5 cursor-pointer rounded border-stone-300 accent-amber-700"
+              className="h-3.5 w-3.5 cursor-pointer rounded border-orange-200 accent-orange-500"
             />
-            <span className="text-base text-stone-600">{option}</span>
+            <span className="text-base text-orange-800">{option}</span>
           </label>
         ))}
       </div>

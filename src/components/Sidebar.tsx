@@ -13,7 +13,7 @@ export const Sidebar = ({
   onToggle,
 }: SidebarProps) => {
   return (
-    <aside className="flex w-56 shrink-0 flex-col divide-y divide-stone-100 overflow-y-auto border-r border-stone-200 bg-white">
+    <aside className="flex w-56 shrink-0 flex-col divide-y divide-orange-100 overflow-y-auto border-r border-orange-200 bg-orange-50">
       {categories.map(({ key, title, options }) => (
         <div key={key} className="px-4 py-4">
           <FilterSection
