@@ -3,13 +3,15 @@
 import { useMemo, useState } from 'react';
 import type { FilterCategory, FilterState } from '@/types/filters';
 import type { Venue } from '@/types/venue';
-import { filterVenues, getDistricts, toggleSetValue } from '@/lib/filter-utils';
+import {
+  FILTER_CONFIGS,
+  filterVenues,
+  getDistricts,
+  toggleSetValue,
+} from '@/lib/filter-utils';
 import { BottomSheet } from './BottomSheet';
 import { Sidebar } from './Sidebar';
 import { VenueList } from './VenueList';
-
-const SERVICE_TYPES = ['餐飲', '娛樂', '住宿', '交通', '其他'];
-const PET_TYPES = ['犬', '貓', '其他'];
 
 interface VenueLayoutProps {
   venues: Venue[];
@@ -31,11 +33,12 @@ export const VenueLayout = ({ venues }: VenueLayoutProps) => {
   ]);
 
   const categories = useMemo<FilterCategory[]>(
-    () => [
-      { key: 'serviceTypes', title: '服務類型', options: SERVICE_TYPES },
-      { key: 'petTypes', title: '寵物種類', options: PET_TYPES },
-      { key: 'districts', title: '行政區', options: districts },
-    ],
+    () =>
+      FILTER_CONFIGS.map(({ key, title, staticOptions }) => ({
+        key,
+        title,
+        options: staticOptions ?? districts,
+      })),
     [districts],
   );
 
@@ -44,6 +47,14 @@ export const VenueLayout = ({ venues }: VenueLayoutProps) => {
       ...prev,
       [category]: toggleSetValue(prev[category], value),
     }));
+  };
+
+  const handleClearAll = () => {
+    setSelectedFilters({
+      serviceTypes: new Set(),
+      petTypes: new Set(),
+      districts: new Set(),
+    });
   };
 
   return (
@@ -58,7 +69,10 @@ export const VenueLayout = ({ venues }: VenueLayoutProps) => {
       <VenueList
         venues={filteredVenues}
         totalCount={venues.length}
+        selectedFilters={selectedFilters}
         onOpenSheet={() => setIsSheetOpen(true)}
+        onRemoveFilter={handleToggle}
+        onClearAllFilters={handleClearAll}
       />
       <BottomSheet
         isOpen={isSheetOpen}

@@ -1,16 +1,24 @@
+import type { FilterState } from '@/types/filters';
 import type { Venue } from '@/types/venue';
+import { ActiveFilters } from './ActiveFilters';
 import { VenueCard } from './VenueCard';
 
 interface VenueListProps {
   venues: Venue[];
   totalCount: number;
+  selectedFilters: FilterState;
   onOpenSheet: () => void;
+  onRemoveFilter: (category: keyof FilterState, value: string) => void;
+  onClearAllFilters: () => void;
 }
 
 export const VenueList = ({
   venues,
   totalCount,
+  selectedFilters,
   onOpenSheet,
+  onRemoveFilter,
+  onClearAllFilters,
 }: VenueListProps) => {
   return (
     <main className="flex-1 overflow-y-auto">
@@ -22,6 +30,11 @@ export const VenueList = ({
           篩選
         </button>
       </div>
+      <ActiveFilters
+        selectedFilters={selectedFilters}
+        onRemove={onRemoveFilter}
+        onClearAll={onClearAllFilters}
+      />
       <div className="p-4">
         <p className="mb-3 text-xs text-gray-400">
           {venues.length === totalCount

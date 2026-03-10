@@ -2,6 +2,27 @@ import type { FilterState } from '@/types/filters';
 import type { Venue } from '@/types/venue';
 import { hasOverlap } from './utils';
 
+export const FILTER_CONFIGS: {
+  key: keyof FilterState;
+  title: string;
+  staticOptions?: string[];
+}[] = [
+  {
+    key: 'serviceTypes',
+    title: '服務類型',
+    staticOptions: ['餐飲', '娛樂', '住宿', '交通', '其他'],
+  },
+  {
+    key: 'petTypes',
+    title: '寵物種類',
+    staticOptions: ['犬', '貓', '其他'],
+  },
+  {
+    key: 'districts',
+    title: '行政區',
+  },
+];
+
 export const toggleSetValue = (
   set: Set<string>,
   value: string,
