@@ -24,7 +24,7 @@ export const ActiveFilters = ({
         <button
           key={`${category}-${value}`}
           onClick={() => onRemove(category, value)}
-          className="flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs text-amber-800 hover:bg-amber-200"
+          className="flex cursor-pointer items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-sm text-amber-800 hover:bg-amber-200"
         >
           {value}
           <span aria-hidden>×</span>
@@ -32,7 +32,7 @@ export const ActiveFilters = ({
       ))}
       <button
         onClick={onClearAll}
-        className="text-xs text-stone-400 hover:text-stone-600"
+        className="cursor-pointer text-sm text-stone-400 hover:text-stone-600"
       >
         清除全部
       </button>

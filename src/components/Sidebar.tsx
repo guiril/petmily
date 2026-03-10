@@ -13,15 +13,16 @@ export const Sidebar = ({
   onToggle,
 }: SidebarProps) => {
   return (
-    <aside className="flex w-44 shrink-0 flex-col gap-5 overflow-y-auto border-r border-stone-200 bg-white p-4">
+    <aside className="flex w-56 shrink-0 flex-col divide-y divide-stone-100 overflow-y-auto border-r border-stone-200 bg-white">
       {categories.map(({ key, title, options }) => (
-        <FilterSection
-          key={key}
-          title={title}
-          options={options}
-          selected={selectedFilters[key]}
-          onToggle={(value) => onToggle(key, value)}
-        />
+        <div key={key} className="px-4 py-4">
+          <FilterSection
+            title={title}
+            options={options}
+            selected={selectedFilters[key]}
+            onToggle={(value) => onToggle(key, value)}
+          />
+        </div>
       ))}
     </aside>
   );

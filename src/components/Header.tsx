@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export const Header = ({ activeCity }: HeaderProps) => {
   return (
-    <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-stone-200 bg-white px-4">
+    <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-stone-200 bg-white px-6">
       <span className="text-base font-semibold tracking-tight text-stone-900">
         Petmily
       </span>

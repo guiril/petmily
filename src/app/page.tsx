@@ -18,7 +18,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const venues = data.venues[activeCity as CityKey] ?? [];
 
   return (
-    <div className="flex min-h-screen flex-col bg-stone-50">
+    <div className="flex h-screen flex-col bg-stone-50">
       <Header activeCity={activeCity} />
       <VenueLayout venues={venues} />
     </div>

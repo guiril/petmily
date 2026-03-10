@@ -45,15 +45,16 @@ export const BottomSheet = ({
             關閉
           </button>
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col divide-y divide-stone-100">
           {categories.map(({ key, title, options }) => (
-            <FilterSection
-              key={key}
-              title={title}
-              options={options}
-              selected={selectedFilters[key]}
-              onToggle={(value) => onToggle(key, value)}
-            />
+            <div key={key} className="py-4">
+              <FilterSection
+                title={title}
+                options={options}
+                selected={selectedFilters[key]}
+                onToggle={(value) => onToggle(key, value)}
+              />
+            </div>
           ))}
         </div>
       </div>

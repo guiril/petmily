@@ -25,7 +25,7 @@ export const VenueList = ({
       <div className="flex items-center border-b border-stone-100 bg-white px-4 py-2 md:hidden">
         <button
           onClick={onOpenSheet}
-          className="rounded border border-stone-300 px-3 py-1.5 text-sm text-stone-600"
+          className="cursor-pointer rounded border border-stone-300 px-3 py-1.5 text-sm text-stone-600"
         >
           篩選
         </button>
@@ -36,12 +36,12 @@ export const VenueList = ({
         onClearAll={onClearAllFilters}
       />
       <div className="p-4">
-        <p className="mb-3 text-xs text-stone-400">
+        <p className="mb-3 text-sm text-stone-400">
           {venues.length === totalCount
             ? `顯示全部 ${totalCount} 筆`
             : `已篩選 ${venues.length} 筆`}
         </p>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {venues.map((venue) => (
             <VenueCard key={venue.id} venue={venue} />
           ))}
