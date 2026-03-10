@@ -40,8 +40,8 @@ export const BottomSheet = ({
         }`}
       >
         <div className="mb-4 flex items-center justify-between">
-          <span className="text-sm font-semibold text-gray-800">篩選</span>
-          <button onClick={onClose} className="text-sm text-gray-400">
+          <span className="text-sm font-semibold text-stone-800">篩選</span>
+          <button onClick={onClose} className="text-sm text-stone-400">
             關閉
           </button>
         </div>

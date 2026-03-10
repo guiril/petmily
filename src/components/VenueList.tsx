@@ -22,10 +22,10 @@ export const VenueList = ({
 }: VenueListProps) => {
   return (
     <main className="flex-1 overflow-y-auto">
-      <div className="flex items-center border-b border-gray-100 bg-white px-4 py-2 md:hidden">
+      <div className="flex items-center border-b border-stone-100 bg-white px-4 py-2 md:hidden">
         <button
           onClick={onOpenSheet}
-          className="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-600"
+          className="rounded border border-stone-300 px-3 py-1.5 text-sm text-stone-600"
         >
           篩選
         </button>
@@ -36,7 +36,7 @@ export const VenueList = ({
         onClearAll={onClearAllFilters}
       />
       <div className="p-4">
-        <p className="mb-3 text-xs text-gray-400">
+        <p className="mb-3 text-xs text-stone-400">
           {venues.length === totalCount
             ? `顯示全部 ${totalCount} 筆`
             : `已篩選 ${venues.length} 筆`}

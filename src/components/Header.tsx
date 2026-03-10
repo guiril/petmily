@@ -8,8 +8,8 @@ interface HeaderProps {
 
 export const Header = ({ activeCity }: HeaderProps) => {
   return (
-    <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-gray-200 bg-white px-4">
-      <span className="text-base font-semibold tracking-tight text-gray-900">
+    <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-stone-200 bg-white px-4">
+      <span className="text-base font-semibold tracking-tight text-stone-900">
         Petmily
       </span>
       <div className="flex gap-1">
@@ -20,7 +20,7 @@ export const Header = ({ activeCity }: HeaderProps) => {
             return (
               <span
                 key={key}
-                className="cursor-not-allowed rounded px-3 py-1 text-sm text-gray-300"
+                className="cursor-not-allowed rounded px-3 py-1 text-sm text-stone-300"
               >
                 {label}
               </span>
@@ -33,8 +33,8 @@ export const Header = ({ activeCity }: HeaderProps) => {
               href={`/?city=${key}`}
               className={`rounded px-3 py-1 text-sm transition-colors ${
                 isActive
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-500 hover:bg-gray-100'
+                  ? 'bg-amber-800 text-white'
+                  : 'text-stone-500 hover:bg-stone-100'
               }`}
             >
               {label}

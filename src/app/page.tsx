@@ -10,7 +10,6 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { city: cityParam } = await searchParams;
-
   const activeCity =
     CITIES.find((city) => city.key === cityParam && city.available)?.key ??
     DEFAULT_CITY;
@@ -19,7 +18,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const venues = data.venues[activeCity as CityKey] ?? [];
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-stone-50">
       <Header activeCity={activeCity} />
       <VenueLayout venues={venues} />
     </div>
