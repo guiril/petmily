@@ -18,6 +18,8 @@ export interface VenuesData {
   updatedAt: number;
   venues: {
     taichung: Venue[];
+    taipei?: Venue[];
+    kaohsiung?: Venue[];
   };
 }
 
