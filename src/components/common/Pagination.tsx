@@ -3,6 +3,22 @@
 import { useMemo } from 'react';
 import { ELLIPSIS, getPageNumbers } from '@/utils/pagination';
 
+interface NavButtonProps {
+  icon: 'chevron_left' | 'chevron_right';
+  disabled: boolean;
+  onClick: () => void;
+}
+
+const NavButton = ({ icon, disabled, onClick }: NavButtonProps) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className="w-10 h-10 flex justify-center items-center rounded-full not-disabled:text-ink-muted cursor-pointer transition-colors not-disabled:hover:bg-orange-100 disabled:cursor-not-allowed disabled:text-ink-disabled"
+  >
+    <span className="material-symbols-outlined text-xl!">{icon}</span>
+  </button>
+);
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -14,51 +30,45 @@ export const Pagination = ({
   totalPages,
   onPageChange,
 }: PaginationProps) => {
-  const pageNumbers = useMemo(
-    () => getPageNumbers(currentPage, totalPages),
-    [currentPage, totalPages],
-  );
+  const pageNumbers = useMemo(() => getPageNumbers(currentPage, totalPages), [
+    currentPage,
+    totalPages,
+  ]);
 
   return (
-    <div className="mt-8 flex items-center justify-center gap-2">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
+    <div className="mt-8 flex items-center justify-center gap-2 max-sm:gap-0">
+      <NavButton
+        icon="chevron_left"
         disabled={currentPage === 1}
-        className="min-w-7 min-h-7 rounded-full text-xl text-orange-500 cursor-pointer transition-colors hover:bg-orange-100 disabled:cursor-not-allowed disabled:opacity-30"
-      >
-        ‹
-      </button>
-
-      {pageNumbers.map((page, index) =>
-        page === ELLIPSIS ? (
+        onClick={() => onPageChange(currentPage - 1)}
+      />
+      {pageNumbers.map((number, index) =>
+        number === ELLIPSIS ? (
           <span
             key={`ellipsis-${index}`}
-            className="px-2 py-1.5 text-sm text-orange-300"
+            className="px-2 py-1.5 text-sm text-ink-sub cursor-default"
           >
             …
           </span>
         ) : (
           <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={`min-w-7 min-h-7 rounded-full text-sm cursor-pointer transition-colors ${
-              currentPage === page
-                ? 'bg-orange-400 text-white'
-                : 'text-orange-500 hover:bg-orange-100'
+            key={number}
+            onClick={() => onPageChange(number)}
+            className={`w-10 h-10 rounded-full text-sm font-medium cursor-pointer transition-colors ${
+              currentPage === number
+                ? 'bg-ink text-white shadow-[0px_0px_0px_3px_#00000014]'
+                : 'text-ink-sub hover:bg-orange-100'
             }`}
           >
-            {page}
+            {number}
           </button>
         ),
       )}
-
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
+      <NavButton
+        icon="chevron_right"
         disabled={currentPage === totalPages}
-        className="min-w-7 min-h-7 rounded-full text-xl text-orange-500 cursor-pointer transition-colors hover:bg-orange-100 disabled:cursor-not-allowed disabled:opacity-30"
-      >
-        ›
-      </button>
+        onClick={() => onPageChange(currentPage + 1)}
+      />
     </div>
   );
 };

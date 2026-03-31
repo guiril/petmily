@@ -1,9 +1,9 @@
-import type { VenuesData } from '@/types/venue';
+import type { CityKey, RawVenue, Venue, VenuesData } from '@/types/venue';
 
 const VENUES_URL =
   'https://raw.githubusercontent.com/guiril/petmily-crawler/main/data/venues.json';
 
-export const fetchVenues = async (): Promise<VenuesData> => {
+export const fetchVenues = async (): Promise<Venue[]> => {
   const response = await fetch(VENUES_URL, {
     next: { revalidate: 3600 },
   });
@@ -13,5 +13,10 @@ export const fetchVenues = async (): Promise<VenuesData> => {
   }
 
   const data: VenuesData = await response.json();
-  return data;
+  return (Object.entries(data.venues) as [
+    CityKey,
+    RawVenue[],
+  ][]).flatMap(([city, venues]) =>
+    (venues ?? []).map((venue) => ({ ...venue, city })),
+  );
 };

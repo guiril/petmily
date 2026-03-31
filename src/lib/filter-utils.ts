@@ -1,25 +1,31 @@
-import type { FilterState } from '@/types/filters';
+import type { FilterOption, FilterState } from '@/types/filters';
 import type { Venue } from '@/types/venue';
 import { hasOverlap } from './utils';
 
 export const FILTER_CONFIGS: {
   key: keyof FilterState;
   title: string;
-  staticOptions?: string[];
+  options: FilterOption[];
 }[] = [
   {
     key: 'serviceTypes',
     title: '服務類型',
-    staticOptions: ['餐飲', '娛樂', '住宿', '交通', '其他'],
+    options: [
+      { key: 'food', name: '餐飲' },
+      { key: 'ent', name: '娛樂' },
+      { key: 'stay', name: '住宿' },
+      { key: 'trans', name: '交通' },
+      { key: 'other', name: '其他' },
+    ],
   },
   {
     key: 'petTypes',
     title: '寵物種類',
-    staticOptions: ['犬', '貓', '其他'],
-  },
-  {
-    key: 'districts',
-    title: '行政區',
+    options: [
+      { key: 'dog', name: '犬', iconSrc: 'images/filter/dog.svg' },
+      { key: 'cat', name: '貓', iconSrc: 'images/filter/cat.svg' },
+      { key: 'other', name: '其他', iconSrc: 'images/filter/other.svg' },
+    ],
   },
 ];
 
@@ -38,25 +44,31 @@ export const toggleSetValue = (
   return newSet;
 };
 
-export const getDistricts = (venues: Venue[]): string[] =>
-  [...new Set(venues.map((venue) => venue.district))].sort();
+const matchesTypes = (types: string[], selected: Set<string>): boolean =>
+  selected.size === 0 || hasOverlap(types, selected);
 
-const matchesServiceType = (venue: Venue, selected: Set<string>): boolean =>
-  selected.size === 0 || hasOverlap(venue.serviceType, selected);
+const matchesDistrict = (
+  city: string,
+  district: string,
+  selectedCityDistricts: Record<string, Set<string>>,
+): boolean => {
+  const hasAnySelected = Object.values(selectedCityDistricts).some(
+    (districts) => districts.size > 0,
+  );
 
-const matchesPetType = (venue: Venue, selected: Set<string>): boolean =>
-  selected.size === 0 || hasOverlap(venue.petType, selected);
+  if (!hasAnySelected) return true;
 
-const matchesDistrict = (venue: Venue, selected: Set<string>): boolean =>
-  selected.size === 0 || selected.has(venue.district);
+  return selectedCityDistricts[city]?.has(district) ?? false;
+};
 
 export const filterVenues = (
   venues: Venue[],
   selectedFilters: FilterState,
+  selectedCityDistricts: Record<string, Set<string>>,
 ): Venue[] =>
   venues.filter(
     (venue) =>
-      matchesServiceType(venue, selectedFilters.serviceTypes) &&
-      matchesPetType(venue, selectedFilters.petTypes) &&
-      matchesDistrict(venue, selectedFilters.districts),
+      matchesTypes(venue.serviceType, selectedFilters.serviceTypes) &&
+      matchesTypes(venue.petType, selectedFilters.petTypes) &&
+      matchesDistrict(venue.city, venue.district, selectedCityDistricts),
   );
