@@ -6,7 +6,7 @@ export default async function Home() {
   const venues = await fetchVenues();
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-dvh flex-col bg-background">
       <Header />
       <VenueLayout venues={venues} />
     </div>
