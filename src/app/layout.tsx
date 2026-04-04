@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Petmily | 寵物友善場所查詢',
-  description: '查詢台灣各地寵物友善餐廳、住宿、娛樂等場所',
+  description: '查詢台中市寵物友善餐廳、住宿、娛樂等場所',
 };
 
 export default function RootLayout({
