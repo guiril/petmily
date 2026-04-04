@@ -5,7 +5,7 @@ const VENUES_URL =
 
 export const fetchVenues = async (): Promise<Venue[]> => {
   const response = await fetch(VENUES_URL, {
-    next: { revalidate: 3600 },
+    cache: 'force-cache',
   });
 
   if (!response.ok) {
@@ -13,10 +13,8 @@ export const fetchVenues = async (): Promise<Venue[]> => {
   }
 
   const data: VenuesData = await response.json();
-  return (Object.entries(data.venues) as [
-    CityKey,
-    RawVenue[],
-  ][]).flatMap(([city, venues]) =>
-    (venues ?? []).map((venue) => ({ ...venue, city })),
+
+  return (Object.entries(data.venues) as [CityKey, RawVenue[]][]).flatMap(
+    ([city, venues]) => (venues ?? []).map((venue) => ({ ...venue, city })),
   );
 };
