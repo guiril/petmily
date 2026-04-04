@@ -30,10 +30,10 @@ export const Pagination = ({
   totalPages,
   onPageChange,
 }: PaginationProps) => {
-  const pageNumbers = useMemo(() => getPageNumbers(currentPage, totalPages), [
-    currentPage,
-    totalPages,
-  ]);
+  const pageNumbers = useMemo(
+    () => getPageNumbers(currentPage, totalPages),
+    [currentPage, totalPages],
+  );
 
   return (
     <div className="mt-8 flex items-center justify-center gap-2 max-sm:gap-0">
