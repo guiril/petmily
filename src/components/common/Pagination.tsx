@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import { ELLIPSIS, getPageNumbers } from '@/lib/pagination';
 
 interface NavButtonProps {
@@ -30,10 +29,7 @@ export const Pagination = ({
   totalPages,
   onPageChange,
 }: PaginationProps) => {
-  const pageNumbers = useMemo(
-    () => getPageNumbers(currentPage, totalPages),
-    [currentPage, totalPages],
-  );
+  const pageNumbers = getPageNumbers(currentPage, totalPages);
 
   return (
     <div className="mt-8 flex items-center justify-center gap-2 max-sm:gap-0">
