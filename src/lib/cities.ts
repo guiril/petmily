@@ -6,16 +6,16 @@ interface CityDistrict {
 interface CityConfig {
   key: string;
   name: string;
-  available: boolean;
+  isAvailable: boolean;
   districts: CityDistrict[];
 }
 
 export const CITIES = [
-  { key: 'taipei', name: '台北', available: false, districts: [] },
+  { key: 'taipei', name: '台北', isAvailable: false, districts: [] },
   {
     key: 'taichung',
     name: '台中',
-    available: true,
+    isAvailable: true,
     districts: [
       { key: 'zhongqu', name: '中區' },
       { key: 'dongqu', name: '東區' },
@@ -48,5 +48,5 @@ export const CITIES = [
       { key: 'xinshe', name: '新社區' },
     ],
   },
-  { key: 'kaohsiung', name: '高雄', available: false, districts: [] },
+  { key: 'kaohsiung', name: '高雄', isAvailable: false, districts: [] },
 ] as const satisfies CityConfig[];

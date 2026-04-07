@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import type { FilterCategory, FilterState } from '@/types/filters';
 import { CITIES } from '@/lib/cities';
 import { FilterSection } from './FilterSection';
@@ -22,6 +21,8 @@ export const Sidebar = ({
   onToggle,
   onToggleCityDistrict,
 }: SidebarProps) => {
+  const availableCities = CITIES.filter(({ isAvailable }) => isAvailable);
+
   return (
     <aside className="w-65 px-4 flex shrink-0 flex-col border-r border-orange-200 bg-white overflow-y-hidden hover:overflow-y-auto [scrollbar-gutter:stable]">
       <div className="pt-6 pb-4 flex justify-between items-center">
@@ -29,20 +30,21 @@ export const Sidebar = ({
           篩選
         </p>
         <button
-          className="text-[13px] leading-4.5 tracking-[0.2px] text-[#A6A09B] cursor-pointer underline underline-offset-2"
-          onClick={() => onClearAllFilters()}
+          className="text-[13px] leading-4.5 tracking-[0.2px] text-[#A6A09B] cursor-pointer underline underline-offset-2 hover:brightness-75"
+          onClick={onClearAllFilters}
         >
           全部清除
         </button>
       </div>
-      <FilterSection
-        name="台中市"
-        options={
-          CITIES.find((city) => city.key === 'taichung')?.districts ?? []
-        }
-        selected={selectedCityDistricts['taichung'] ?? new Set<string>()}
-        onToggle={(value) => onToggleCityDistrict('taichung', value)}
-      />
+      {availableCities.map(({ key, name, districts }) => (
+        <FilterSection
+          key={key}
+          name={name}
+          options={districts}
+          selected={selectedCityDistricts[key] ?? new Set<string>()}
+          onToggle={(value) => onToggleCityDistrict(key, value)}
+        />
+      ))}
       {categories.map(({ key, name, options }) => (
         <FilterSection
           key={key}
