@@ -4,7 +4,9 @@ A web app that helps pet owners in Taiwan discover pet-friendly venues, built wi
 
 ## Demo
 
-[![Petmily screenshot](https://pub-277ae1ca0a2742a39a90fad8945c6329.r2.dev/20260407201100%402x.png)](https://petmily-flame.vercel.app)
+| Desktop | Mobile |
+|---------|--------|
+| [![Petmily desktop](https://pub-277ae1ca0a2742a39a90fad8945c6329.r2.dev/petmily-desktop.png)](https://petmily-flame.vercel.app) | [![Petmily mobile](https://pub-277ae1ca0a2742a39a90fad8945c6329.r2.dev/petmily-mobile.png)](https://petmily-flame.vercel.app) |
 
 Live site: [petmily-flame.vercel.app](https://petmily-flame.vercel.app)
 
