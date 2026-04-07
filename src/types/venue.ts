@@ -1,9 +1,11 @@
-export interface VenueLocation {
+import { CITIES } from '@/lib/cities';
+
+interface VenueLocation {
   lat: number;
   lng: number;
 }
 
-export type CityKey = 'taichung' | 'taipei' | 'kaohsiung';
+export type CityKey = (typeof CITIES)[number]['key'];
 
 export interface Venue {
   id: string;

@@ -2,14 +2,16 @@ import type { FilterOption, FilterState } from '@/types/filters';
 import type { Venue } from '@/types/venue';
 import { hasOverlap } from './utils';
 
-export const FILTER_CONFIGS: {
+interface FilterConfig {
   key: keyof FilterState;
-  title: string;
+  name: string;
   options: FilterOption[];
-}[] = [
+}
+
+export const FILTER_CONFIGS: FilterConfig[] = [
   {
     key: 'serviceTypes',
-    title: '服務類型',
+    name: '服務類型',
     options: [
       { key: 'food', name: '餐飲' },
       { key: 'ent', name: '娛樂' },
@@ -20,7 +22,7 @@ export const FILTER_CONFIGS: {
   },
   {
     key: 'petTypes',
-    title: '寵物種類',
+    name: '寵物種類',
     options: [
       { key: 'dog', name: '犬', iconSrc: 'images/filter/dog.svg' },
       { key: 'cat', name: '貓', iconSrc: 'images/filter/cat.svg' },

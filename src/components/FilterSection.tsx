@@ -7,14 +7,14 @@ import type { FilterOption } from '@/types/filters';
 const VISIBLE_COUNT = 8;
 
 interface FilterSectionProps {
-  title: string;
+  name: string;
   options: FilterOption[];
   selected: Set<string>;
   onToggle: (value: string) => void;
 }
 
 export const FilterSection = ({
-  title,
+  name,
   options,
   selected,
   onToggle,
@@ -44,7 +44,7 @@ export const FilterSection = ({
         onMouseLeave={() => setIsButtonHovered(false)}
       >
         <legend className="text-base font-bold -tracking-[0.02em] text-ink">
-          {`${title} (${optionsLength})`}
+          {`${name} (${optionsLength})`}
         </legend>
         <Image src={chevronSrc} width={28} height={28} alt="" />
       </button>

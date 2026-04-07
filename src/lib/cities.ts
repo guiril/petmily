@@ -1,20 +1,20 @@
-export interface CityDistrict {
+interface CityDistrict {
   key: string;
   name: string;
 }
 
-export interface CityConfig {
+interface CityConfig {
   key: string;
-  label: string;
+  name: string;
   available: boolean;
   districts: CityDistrict[];
 }
 
-export const CITIES: CityConfig[] = [
-  { key: 'taipei', label: '台北', available: false, districts: [] },
+export const CITIES = [
+  { key: 'taipei', name: '台北', available: false, districts: [] },
   {
     key: 'taichung',
-    label: '台中',
+    name: '台中',
     available: true,
     districts: [
       { key: 'zhongqu', name: '中區' },
@@ -48,7 +48,5 @@ export const CITIES: CityConfig[] = [
       { key: 'xinshe', name: '新社區' },
     ],
   },
-  { key: 'kaohsiung', label: '高雄', available: false, districts: [] },
-];
-
-export const DEFAULT_CITY = 'taichung';
+  { key: 'kaohsiung', name: '高雄', available: false, districts: [] },
+] as const satisfies CityConfig[];

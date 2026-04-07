@@ -36,17 +36,17 @@ export const Sidebar = ({
         </button>
       </div>
       <FilterSection
-        title="台中市"
+        name="台中市"
         options={
           CITIES.find((city) => city.key === 'taichung')?.districts ?? []
         }
         selected={selectedCityDistricts['taichung'] ?? new Set<string>()}
         onToggle={(value) => onToggleCityDistrict('taichung', value)}
       />
-      {categories.map(({ key, title, options }) => (
+      {categories.map(({ key, name, options }) => (
         <FilterSection
           key={key}
-          title={title}
+          name={name}
           options={options}
           selected={selectedFilters[key]}
           onToggle={(value) => onToggle(key, value)}

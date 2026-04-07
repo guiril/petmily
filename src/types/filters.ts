@@ -11,6 +11,6 @@ export interface FilterOption {
 
 export interface FilterCategory {
   key: keyof FilterState;
-  title: string;
+  name: string;
   options: FilterOption[];
 }
