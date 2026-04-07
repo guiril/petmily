@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { ELLIPSIS, getPageNumbers } from '@/utils/pagination';
+import { ELLIPSIS, getPageNumbers } from '@/lib/pagination';
 
 interface NavButtonProps {
   icon: 'chevron_left' | 'chevron_right';

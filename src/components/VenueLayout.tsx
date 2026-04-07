@@ -3,20 +3,17 @@
 import { useMemo, useState } from 'react';
 import type { FilterState } from '@/types/filters';
 import type { Venue } from '@/types/venue';
-import {
-  FILTER_CONFIGS,
-  filterVenues,
-  toggleSetValue,
-} from '@/lib/filter-utils';
+import { FILTER_CONFIGS, filterVenues } from '@/lib/filters';
+import { toggleSetValue } from '@/lib/utils';
 import { BottomSheet } from './BottomSheet';
 import { Sidebar } from './Sidebar';
 import { VenueList } from './VenueList';
 
+const PAGE_SIZE = 8;
+
 interface VenueLayoutProps {
   venues: Venue[];
 }
-
-const PAGE_SIZE = 8;
 
 export const VenueLayout = ({ venues }: VenueLayoutProps) => {
   const [selectedFilters, setSelectedFilters] = useState<FilterState>({

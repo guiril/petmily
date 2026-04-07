@@ -31,21 +31,6 @@ export const FILTER_CONFIGS: FilterConfig[] = [
   },
 ];
 
-export const toggleSetValue = (
-  set: Set<string>,
-  value: string,
-): Set<string> => {
-  const newSet = new Set(set);
-
-  if (newSet.has(value)) {
-    newSet.delete(value);
-  } else {
-    newSet.add(value);
-  }
-
-  return newSet;
-};
-
 const matchesTypes = (types: string[], selected: Set<string>): boolean =>
   selected.size === 0 || hasOverlap(types, selected);
 
