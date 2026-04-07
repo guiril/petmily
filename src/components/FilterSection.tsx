@@ -19,15 +19,13 @@ export const FilterSection = ({
   selected,
   onToggle,
 }: FilterSectionProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [isHeaderHovered, setIsButtonHovered] = useState<boolean>(false);
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const optionsLength = options.length;
-  const hasMore = optionsLength > VISIBLE_COUNT;
+  const hasMore = options.length > VISIBLE_COUNT;
   const visibleOptions =
     hasMore && !isExpanded ? options.slice(0, VISIBLE_COUNT) : options;
-  const hiddenCount = optionsLength - VISIBLE_COUNT;
 
   const chevronVariant = isHeaderHovered ? 'hover' : 'default';
   const chevronSrc = isOpen
@@ -40,11 +38,11 @@ export const FilterSection = ({
         type="button"
         className="py-2 flex justify-between items-center cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
-        onMouseEnter={() => setIsButtonHovered(true)}
-        onMouseLeave={() => setIsButtonHovered(false)}
+        onMouseEnter={() => setIsHeaderHovered(true)}
+        onMouseLeave={() => setIsHeaderHovered(false)}
       >
         <legend className="text-base font-bold -tracking-[0.02em] text-ink">
-          {`${name} (${optionsLength})`}
+          {`${name} (${options.length})`}
         </legend>
         <Image src={chevronSrc} width={28} height={28} alt="" />
       </button>
@@ -57,7 +55,7 @@ export const FilterSection = ({
           {visibleOptions.map(({ key, name }) => (
             <label
               key={key}
-              className={`flex justify-center itmes-center gap-2.5 py-3 text-center border border-[#E7E5E4] rounded-[10px] cursor-pointer  ${
+              className={`flex justify-center items-center gap-2.5 py-3 text-center border border-[#E7E5E4] rounded-[10px] cursor-pointer ${
                 selected.has(name)
                   ? 'text-white bg-[#292524]'
                   : 'text-[#57534D] bg-white hover:bg-[#E7E5E4] active:bg-[#E7E5E4]'
