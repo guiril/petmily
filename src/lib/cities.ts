@@ -50,3 +50,5 @@ export const CITIES = [
   },
   { key: 'kaohsiung', name: '高雄', isAvailable: false, districts: [] },
 ] as const satisfies CityConfig[];
+
+export const AVAILABLE_CITIES = CITIES.filter(({ isAvailable }) => isAvailable);
