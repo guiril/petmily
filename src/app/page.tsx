@@ -1,6 +1,6 @@
+import { fetchVenues } from '@/lib/venues';
 import { Header } from '@/components/Header';
 import { VenueLayout } from '@/components/VenueLayout';
-import { fetchVenues } from '@/lib/venues';
 
 export default async function Home() {
   const venues = await fetchVenues();

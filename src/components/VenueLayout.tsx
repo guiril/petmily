@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import type { Venue } from '@/types/venue';
+import { useVenueFilters } from '@/hooks/useVenueFilters';
 import { BottomSheet } from './BottomSheet';
 import { Sidebar } from './Sidebar';
 import { VenueList } from './VenueList';
-import { useVenueFilters } from '@/hooks/useVenueFilters';
 
 interface VenueLayoutProps {
   venues: Venue[];
