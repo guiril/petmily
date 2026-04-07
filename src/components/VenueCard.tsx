@@ -42,7 +42,8 @@ const SERVICE_TYPE_STYLES: Record<string, string> = {
 
 const getMapUrl = (venue: Venue): string => {
   if (venue.location) {
-    return `https://www.google.com/maps?q=${venue.location.lat},${venue.location.lng}`;
+    const { lat, lng } = venue.location;
+    return `https://www.google.com/maps?q=${lat},${lng}`;
   }
 
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -51,64 +52,58 @@ const getMapUrl = (venue: Venue): string => {
 };
 
 export const VenueCard = ({ venue }: VenueCardProps) => {
+  const { name, address, phone, imageUrl, petType, serviceType } = venue;
   const mapUrl = getMapUrl(venue);
 
   return (
-    <li className="flex flex-col max-md:flex-row border border-[#E7E5E4] bg-white rounded-2xl max-md:h-35.25 max-md:rounded-xl">
+    <li className="flex flex-col border border-[#E7E5E4] bg-white rounded-2xl max-md:h-35.25 max-md:flex-row max-md:rounded-xl">
       <div
-        style={
-          venue.imageUrl
-            ? { backgroundImage: `url(${venue.imageUrl})` }
-            : undefined
-        }
+        style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
         className={`relative h-46.25 bg-center bg-no-repeat rounded-t-2xl max-md:w-[37.9%] max-md:h-auto max-md:rounded-xl ${
-          venue.imageUrl
+          imageUrl
             ? 'bg-cover'
             : 'bg-white bg-[url(/images/logo-2.svg)] bg-contain'
         }`}
       >
         <ul className="absolute left-4 bottom-3 flex gap-2 max-md:left-3 max-md:bottom-2">
-          {venue.petType.map((type) => (
-            <li
-              key={type}
-              className={`w-7 h-7 flex justify-center items-center rounded-full ${PET_TYPE_ICONS[type].bgColor} ${PET_TYPE_ICONS[type].borderColor} max-md:w-6 max-md:h-6`}
-            >
-              <Image
-                src={PET_TYPE_ICONS[type].src}
-                width={18}
-                height={18}
-                alt={type}
-              />
-            </li>
-          ))}
+          {petType.map((type) => {
+            const icon = PET_TYPE_ICONS[type];
+            return (
+              <li
+                key={type}
+                className={`w-7 h-7 flex justify-center items-center rounded-full ${icon.bgColor} ${icon.borderColor} max-md:w-6 max-md:h-6`}
+              >
+                <Image src={icon.src} width={18} height={18} alt={type} />
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="p-4 flex flex-col justify-between flex-1 max-md:p-3 overflow-hidden">
         <div className="flex flex-col flex-1">
           <h3
-            title={venue.name}
+            title={name}
             className="text-lg font-bold text-ink overflow-hidden whitespace-nowrap text-ellipsis max-md:text-sm"
           >
-            {venue.name}
+            {name}
           </h3>
           <span className="block mb-4 text-sm text-ink-muted max-md:text-xs max-md:mb-3">
-            {venue.address}
+            {address}
           </span>
-          {venue.phone && (
+          {phone && (
             <div className="flex items-center gap-2">
               <Image src="/images/phone.svg" width={12} height={12} alt="" />
               <span className="text-[15px] font-bold text-ink max-md:text-xs">
-                {venue.phone}
+                {phone}
               </span>
             </div>
           )}
         </div>
         <div className="flex justify-between items-end">
           <ul className="flex gap-1.5">
-            {venue.serviceType.map((type) => (
+            {serviceType.map((type) => (
               <li key={type}>
                 <span
-                  key={type}
                   className={`px-2 py-1 text-xs font-medium tracking-[-0.02em] rounded-md ${SERVICE_TYPE_STYLES[type]}`}
                 >
                   {type}
