@@ -29,7 +29,7 @@ export const VenueLayout = ({ venues }: VenueLayoutProps) => {
 
   return (
     <div className="flex flex-1 overflow-hidden">
-      <div className="max-md:hidden flex">
+      <div className="max-lg:hidden flex">
         <Sidebar
           selectedFilters={selectedFilters}
           selectedCityDistricts={selectedCityDistricts}

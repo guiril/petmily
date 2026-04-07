@@ -33,16 +33,16 @@ export const VenueList = ({
 
   return (
     <main ref={mainRef} className="flex-1 overflow-y-auto">
-      <div className="px-6 pt-8 pb-6 max-lg:pb-5 max-md:px-4 max-md:pt-5">
-        <div className="mb-6 flex justify-between items-center max-md:mb-5">
-          <p className="text-2xl font-bold text-ink max-md:text-base max-md:leading-8">
+      <div className="px-6 pt-8 pb-6 max-lg:pb-5 max-lg:px-4 max-lg:pt-5">
+        <div className="mb-6 flex justify-between items-center max-lg:mb-5">
+          <p className="text-2xl font-bold text-ink max-lg:text-base max-lg:leading-8">
             {filteredCount === totalCount
               ? `目前顯示 ${totalCount} 間店家`
               : `找到 ${filteredCount} 件相符條件`}
           </p>
           <button
             onClick={onOpenSheet}
-            className="pl-2.5 pr-3 py-2 hidden justify-center items-center gap-1 bg-[#0C0A09] rounded-lg cursor-pointer max-md:flex"
+            className="pl-2.5 pr-3 py-2 hidden justify-center items-center gap-1 bg-[#0C0A09] rounded-lg cursor-pointer max-lg:flex"
           >
             <Image src="/images/filter.svg" width={12} height={12} alt="" />
             <span className="text-xs text-white">篩選</span>

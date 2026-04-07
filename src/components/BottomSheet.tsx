@@ -29,7 +29,7 @@ export const BottomSheet = ({
 }: BottomSheetProps) => {
   return (
     <div
-      className={`fixed inset-0 z-50 hidden max-md:block ${
+      className={`fixed inset-0 z-50 hidden max-lg:block ${
         isOpen ? '' : 'pointer-events-none'
       }`}
     >

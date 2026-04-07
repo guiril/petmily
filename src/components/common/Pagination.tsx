@@ -32,7 +32,7 @@ export const Pagination = ({
   const pageNumbers = getPageNumbers(currentPage, totalPages);
 
   return (
-    <div className="mt-8 flex items-center justify-center gap-2 max-sm:gap-0">
+    <div className="mt-8 flex items-center justify-center gap-2 max-lg:gap-0">
       <NavButton
         icon="chevron_left"
         disabled={currentPage === 1}
