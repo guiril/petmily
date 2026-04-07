@@ -32,8 +32,8 @@ export const VenueList = ({
   };
 
   return (
-    <main ref={mainRef} className="flex-1 overflow-y-auto">
-      <div className="px-6 pt-8 pb-6 max-lg:pb-5 max-lg:px-4 max-lg:pt-5">
+    <main ref={mainRef} className="flex-1 overflow-y-auto flex flex-col">
+      <div className="flex-1 px-6 pt-8 pb-6 max-lg:pb-5 max-lg:px-4 max-lg:pt-5">
         <div className="mb-6 flex justify-between items-center max-lg:mb-5">
           <p className="text-2xl font-bold text-ink max-lg:text-base max-lg:leading-8">
             {filteredCount === totalCount
