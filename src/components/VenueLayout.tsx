@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import type { Venue } from '@/types/venue';
-import { FILTER_CONFIGS } from '@/lib/filters';
 import { BottomSheet } from './BottomSheet';
 import { Sidebar } from './Sidebar';
 import { VenueList } from './VenueList';
