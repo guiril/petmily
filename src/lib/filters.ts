@@ -55,7 +55,7 @@ export const filterVenues = (
 ): Venue[] =>
   venues.filter(
     (venue) =>
-      matchesTypes(venue.serviceType, selectedFilters.serviceTypes) &&
-      matchesTypes(venue.petType, selectedFilters.petTypes) &&
+      matchesTypes(venue.serviceTypes, selectedFilters.serviceTypes) &&
+      matchesTypes(venue.petTypes, selectedFilters.petTypes) &&
       matchesDistrict(venue.city, venue.district, selectedCityDistricts),
   );

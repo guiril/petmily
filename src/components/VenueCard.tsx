@@ -52,7 +52,7 @@ const getMapUrl = (venue: Venue): string => {
 };
 
 export const VenueCard = ({ venue }: VenueCardProps) => {
-  const { name, address, phone, imageUrl, petType, serviceType } = venue;
+  const { name, address, phone, imageUrl, petTypes, serviceTypes } = venue;
   const mapUrl = getMapUrl(venue);
 
   return (
@@ -66,7 +66,7 @@ export const VenueCard = ({ venue }: VenueCardProps) => {
         }`}
       >
         <ul className="absolute left-4 bottom-3 flex gap-2 max-lg:left-3 max-lg:bottom-2">
-          {petType.map((type) => {
+          {petTypes.map((type) => {
             const icon = PET_TYPE_ICONS[type];
             return (
               <li
@@ -101,7 +101,7 @@ export const VenueCard = ({ venue }: VenueCardProps) => {
         </div>
         <div className="flex justify-between items-end">
           <ul className="flex gap-1.5">
-            {serviceType.map((type) => (
+            {serviceTypes.map((type) => (
               <li key={type}>
                 <span
                   className={`px-2 py-1 text-xs font-medium tracking-[-0.02em] rounded-md ${SERVICE_TYPE_STYLES[type]}`}

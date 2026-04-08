@@ -13,8 +13,8 @@ export interface Venue {
   address: string;
   district: string;
   city: CityKey;
-  serviceType: string[];
-  petType: string[];
+  serviceTypes: string[];
+  petTypes: string[];
   phone?: string;
   location?: VenueLocation;
   imageUrl?: string;
