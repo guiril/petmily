@@ -1,9 +1,9 @@
-import { fetchVenues } from '@/lib/venues';
+import { getVenuesByCity } from '@/services/venues';
 import { Header } from '@/components/Header';
 import { VenueLayout } from '@/components/VenueLayout';
 
 export default async function Home() {
-  const venues = await fetchVenues();
+  const venues = (await getVenuesByCity('taichung')) ?? [];
 
   return (
     <div className="flex h-dvh flex-col bg-background">
