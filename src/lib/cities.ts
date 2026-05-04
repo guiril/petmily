@@ -11,7 +11,25 @@ interface CityConfig {
 }
 
 export const CITIES = [
-  { key: 'taipei', name: '台北', isAvailable: false, districts: [] },
+  {
+    key: 'taipei',
+    name: '台北',
+    isAvailable: false,
+    districts: [
+      { key: 'beitou', name: '北投區' },
+      { key: 'shilin', name: '士林區' },
+      { key: 'zhongshan', name: '中山區' },
+      { key: 'neihu', name: '內湖區' },
+      { key: 'datong', name: '大同區' },
+      { key: 'songshan', name: '松山區' },
+      { key: 'wanhua', name: '萬華區' },
+      { key: 'zhongzheng', name: '中正區' },
+      { key: 'daan', name: '大安區' },
+      { key: 'xinyi', name: '信義區' },
+      { key: 'nangang', name: '南港區' },
+      { key: 'wenshan', name: '文山區' },
+    ],
+  },
   {
     key: 'taichung',
     name: '台中',
