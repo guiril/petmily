@@ -57,7 +57,7 @@ export const FilterSection = ({
               key={key}
               className={`flex justify-center items-center gap-2.5 py-3 text-center border border-[#E7E5E4] rounded-[10px] cursor-pointer ${
                 selected.has(name)
-                  ? 'text-white bg-[#292524]'
+                  ? 'text-white bg-[#292524] border-transparent'
                   : 'text-[#57534D] bg-white hover:bg-[#E7E5E4] active:bg-[#E7E5E4]'
               }`}
             >
