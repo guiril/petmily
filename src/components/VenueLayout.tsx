@@ -3,15 +3,18 @@
 import { useState } from 'react';
 import type { Venue } from '@/types/venue';
 import { useVenueFilters } from '@/hooks/useVenueFilters';
+import { Header } from '@/components/Header';
 import { BottomSheet } from './BottomSheet';
 import { Sidebar } from './Sidebar';
 import { VenueList } from './VenueList';
 
 interface VenueLayoutProps {
+  city: string;
   venues: Venue[];
 }
 
-export const VenueLayout = ({ venues }: VenueLayoutProps) => {
+export const VenueLayout = ({ city, venues }: VenueLayoutProps) => {
+  const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const {
@@ -27,36 +30,43 @@ export const VenueLayout = ({ venues }: VenueLayoutProps) => {
     handleClearAll,
   } = useVenueFilters(venues);
 
+  const handleCityModalOpen = () => {
+    setIsCityModalOpen(true);
+  };
+
   return (
-    <div className="flex flex-1 overflow-hidden">
-      <div className="max-lg:hidden flex">
-        <Sidebar
+    <div className="flex h-dvh flex-col bg-background">
+      <Header city={city} onOpenCityModal={handleCityModalOpen} />
+      <div className="flex flex-1 overflow-hidden">
+        <div className="max-lg:hidden flex">
+          <Sidebar
+            selectedFilters={selectedFilters}
+            selectedCityDistricts={selectedCityDistricts}
+            onClearAllFilters={handleClearAll}
+            onToggle={handleToggle}
+            onToggleCityDistrict={handleToggleCityDistrict}
+          />
+        </div>
+        <VenueList
+          venues={paginatedVenues}
+          filteredCount={filteredCount}
+          totalCount={venues.length}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onOpenSheet={() => setIsSheetOpen(true)}
+          onPageChange={setCurrentPage}
+        />
+        <BottomSheet
+          isOpen={isSheetOpen}
           selectedFilters={selectedFilters}
           selectedCityDistricts={selectedCityDistricts}
+          filteredCount={filteredCount}
+          onClose={() => setIsSheetOpen(false)}
           onClearAllFilters={handleClearAll}
           onToggle={handleToggle}
           onToggleCityDistrict={handleToggleCityDistrict}
         />
       </div>
-      <VenueList
-        venues={paginatedVenues}
-        filteredCount={filteredCount}
-        totalCount={venues.length}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onOpenSheet={() => setIsSheetOpen(true)}
-        onPageChange={setCurrentPage}
-      />
-      <BottomSheet
-        isOpen={isSheetOpen}
-        selectedFilters={selectedFilters}
-        selectedCityDistricts={selectedCityDistricts}
-        filteredCount={filteredCount}
-        onClose={() => setIsSheetOpen(false)}
-        onClearAllFilters={handleClearAll}
-        onToggle={handleToggle}
-        onToggleCityDistrict={handleToggleCityDistrict}
-      />
     </div>
   );
 };

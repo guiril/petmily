@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getVenuesByCity } from '@/services/venues';
 import { AVAILABLE_CITIES } from '@/lib/cities';
-import { Header } from '@/components/Header';
 import { VenueLayout } from '@/components/VenueLayout';
 
 interface CityPageProps {
@@ -22,9 +21,8 @@ export default async function CityPage({ params }: CityPageProps) {
   const venues = (await getVenuesByCity(city)) ?? [];
 
   return (
-    <div className="flex h-dvh flex-col bg-background">
-      <Header />
-      <VenueLayout venues={venues} />
-    </div>
+    <>
+      <VenueLayout city={city} venues={venues} />
+    </>
   );
 }
