@@ -22,7 +22,7 @@ export default async function CityPage({ params }: CityPageProps) {
 
   return (
     <>
-      <VenueLayout city={city} venues={venues} />
+      <VenueLayout currentCity={city} venues={venues} />
     </>
   );
 }

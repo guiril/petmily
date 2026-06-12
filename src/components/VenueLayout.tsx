@@ -7,13 +7,14 @@ import { Header } from '@/components/Header';
 import { BottomSheet } from './BottomSheet';
 import { Sidebar } from './Sidebar';
 import { VenueList } from './VenueList';
+import { CityModal } from './CityModal';
 
 interface VenueLayoutProps {
-  city: string;
+  currentCity: string;
   venues: Venue[];
 }
 
-export const VenueLayout = ({ city, venues }: VenueLayoutProps) => {
+export const VenueLayout = ({ currentCity, venues }: VenueLayoutProps) => {
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -36,7 +37,7 @@ export const VenueLayout = ({ city, venues }: VenueLayoutProps) => {
 
   return (
     <div className="flex h-dvh flex-col bg-background">
-      <Header city={city} onOpenCityModal={handleCityModalOpen} />
+      <Header city={currentCity} onOpenCityModal={handleCityModalOpen} />
       <div className="flex flex-1 overflow-hidden">
         <div className="max-lg:hidden flex">
           <Sidebar
@@ -65,6 +66,11 @@ export const VenueLayout = ({ city, venues }: VenueLayoutProps) => {
           onClearAllFilters={handleClearAll}
           onToggle={handleToggle}
           onToggleCityDistrict={handleToggleCityDistrict}
+        />
+        <CityModal
+          isOpen={isCityModalOpen}
+          currentCity={currentCity}
+          onClose={() => setIsCityModalOpen(false)}
         />
       </div>
     </div>
