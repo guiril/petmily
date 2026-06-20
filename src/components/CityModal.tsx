@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { DialogTitle } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import { Modal } from '@/components/common/Modal';
@@ -21,9 +22,18 @@ export const CityModal = ({ isOpen, currentCity, onClose }: CityModalProps) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} panelClassName="max-w-4xl w-full">
-      <DialogTitle className="mb-4 text-center font-semibold text-gray-800">
-        選擇城市
-      </DialogTitle>
+      <div className="relative mb-4 flex items-center justify-center">
+        <DialogTitle className="text-lg font-semibold leading-5.5 -tracking-[0.43px] text-[#0C0A09]">
+          選擇城市
+        </DialogTitle>
+        <button
+          type="button"
+          className="absolute -top-2 -right-2 cursor-pointer"
+          onClick={onClose}
+        >
+          <Image src="/images/close.svg" width={30} height={30} alt="" />
+        </button>
+      </div>
       <TaiwanMap currentCityKey={currentCity} onCitySelect={handleCitySelect} />
     </Modal>
   );
