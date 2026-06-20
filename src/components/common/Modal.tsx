@@ -42,7 +42,7 @@ export const Modal = ({
       <DialogBackdrop className="fixed inset-0 bg-black/60" />
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen flex items-center justify-center p-4">
         <DialogPanel
-          className={`rounded-xl bg-white p-6 ${panelClassName ?? ''}`}
+          className={`rounded-xl bg-white p-6 ${panelClassName}`}
         >
           {children}
         </DialogPanel>
