@@ -20,9 +20,5 @@ export default async function CityPage({ params }: CityPageProps) {
 
   const venues = (await getVenuesByCity(city)) ?? [];
 
-  return (
-    <>
-      <VenueLayout currentCity={city} venues={venues} />
-    </>
-  );
+  return <VenueLayout currentCity={city} venues={venues} />;
 }
