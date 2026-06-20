@@ -89,7 +89,7 @@ const getCountyDisplayState = (
   const cityConfig = CITIES.find((config) => config.name === countyName);
   const cityKey = cityConfig?.key ?? '';
   const isCurrentCity = cityKey === currentCityKey;
-  const isInteractable = (cityConfig?.isAvailable ?? false) && !isCurrentCity;
+  const isInteractable = isCurrentCity || (cityConfig?.isAvailable ?? false);
   const isHovered = hoveredCountyId === countyId;
 
   const fillClass = isCurrentCity

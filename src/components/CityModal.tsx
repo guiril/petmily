@@ -16,7 +16,10 @@ export const CityModal = ({ isOpen, currentCity, onClose }: CityModalProps) => {
   const router = useRouter();
 
   const handleCitySelect = (cityKey: string) => {
-    router.push(`/${cityKey}`);
+    if (cityKey !== currentCity) {
+      router.push(`/${cityKey}`);
+    }
+
     onClose();
   };
 
