@@ -7,7 +7,8 @@ interface HeaderProps {
 }
 
 export const Header = ({ city, onOpenCityModal }: HeaderProps) => {
-  const cityName = AVAILABLE_CITIES.find(({ key }) => key === city)!.name;
+  const cityName =
+    AVAILABLE_CITIES.find(({ key }) => key === city)?.name ?? city;
 
   return (
     <header className="sticky top-0 z-10 px-4 py-6 flex items-center justify-between border-b border-orange-200 bg-white">
@@ -18,6 +19,7 @@ export const Header = ({ city, onOpenCityModal }: HeaderProps) => {
         </a>
       </h1>
       <button
+        type="button"
         className="flex items-center gap-1.5 px-3 py-2 rounded-[10px] border border-[#E7E5E4] text-sm font-medium text-[#57534D] bg-white hover:bg-[#E7E5E4] cursor-pointer"
         onClick={onOpenCityModal}
       >
