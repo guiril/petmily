@@ -1,16 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import type {
-  ExtendedFeatureCollection,
-  ExtendedFeature,
-  GeoProjection,
-} from 'd3-geo';
-import type { Position, Polygon } from 'geojson';
+import { useState, useEffect, useMemo } from 'react';
+import type { ExtendedFeature } from 'd3-geo';
 import type { Topology } from 'topojson-specification';
-import { feature } from 'topojson-client';
-import { geoMercator, geoPath, geoArea } from 'd3-geo';
+import { geoMercator, geoPath } from 'd3-geo';
 import { CITIES } from '@/lib/cities';
+import {
+  toFeatureCollection,
+  splitToPolygons,
+  scaleProjectionAroundCentroid,
+  keepLargestPolygon,
+} from '@/lib/map-utils';
 
 const TAIWAN_TOPO_URL = '/geo/taiwan-country.topo.json';
 
@@ -76,12 +76,12 @@ const LABEL_OFFSETS: Record<string, [number, number]> = {
 };
 
 interface TaiwanMapProps {
-  currentCity: string;
+  currentCityKey: string;
   onCitySelect: (cityKey: string) => void;
 }
 
 interface CountyDisplayState {
-  key: string;
+  cityKey: string;
   isInteractable: boolean;
   fillClass: string;
   textFillClass: string;
@@ -95,37 +95,18 @@ const fetchTaiwanTopo = async (): Promise<Topology | undefined> => {
   }
 };
 
-const toFeatureCollection = (topo: Topology): ExtendedFeatureCollection => {
-  return feature(topo, topo.objects.map) as ExtendedFeatureCollection;
-};
-
-const polygonArea = (coordinates: Position[][]): number =>
-  geoArea({ type: 'Polygon', coordinates });
-
-const splitToPolygons = (countyFeature: ExtendedFeature): ExtendedFeature[] => {
-  const geometry = countyFeature.geometry;
-
-  if (!geometry || geometry.type !== 'MultiPolygon') return [countyFeature];
-
-  return geometry.coordinates.map((polygonCoords, polygonIndex) => ({
-    ...countyFeature,
-    geometry: { type: 'Polygon', coordinates: polygonCoords } as Polygon,
-    properties: { ...countyFeature.properties, polygonIndex },
-  }));
-};
-
 const isOffshoreCounty = (countyFeature: ExtendedFeature): boolean =>
   OFFSHORE_COUNTY_NAMES.includes(countyFeature.properties?.name);
 
 const getCountyDisplayState = (
   countyName: string,
   countyId: string,
-  currentCity: string,
+  currentCityKey: string,
   hoveredCountyId: string | null,
 ): CountyDisplayState => {
   const cityConfig = CITIES.find((config) => config.name === countyName);
-  const configKey = cityConfig?.key ?? '';
-  const isCurrentCity = configKey === currentCity;
+  const cityKey = cityConfig?.key ?? '';
+  const isCurrentCity = cityKey === currentCityKey;
   const isInteractable = (cityConfig?.isAvailable ?? false) && !isCurrentCity;
   const isHovered = hoveredCountyId === countyId;
 
@@ -140,48 +121,10 @@ const getCountyDisplayState = (
       ? 'fill-ink-sub'
       : 'fill-ink-muted';
 
-  return { key: configKey, isInteractable, fillClass, textFillClass };
+  return { cityKey, isInteractable, fillClass, textFillClass };
 };
 
-const scaleProjectionAroundCentroid = (
-  projection: GeoProjection,
-  feature: ExtendedFeature,
-  scaleFactor: number,
-): void => {
-  if (scaleFactor === 1) return;
-
-  const [centroidX, centroidY] = geoPath()
-    .projection(projection)
-    .centroid(feature);
-  const [translateX, translateY] = projection.translate();
-
-  projection.scale(projection.scale() * scaleFactor);
-  projection.translate([
-    centroidX * (1 - scaleFactor) + scaleFactor * translateX,
-    centroidY * (1 - scaleFactor) + scaleFactor * translateY,
-  ]);
-};
-
-const keepLargestPolygon = (
-  countyFeature: ExtendedFeature,
-): ExtendedFeature => {
-  const geometry = countyFeature.geometry;
-
-  if (!geometry || geometry.type !== 'MultiPolygon') return countyFeature;
-
-  const largest = geometry.coordinates.reduce((maxPolygon, currentPolygon) =>
-    polygonArea(currentPolygon) > polygonArea(maxPolygon)
-      ? currentPolygon
-      : maxPolygon,
-  );
-
-  return {
-    ...countyFeature,
-    geometry: { type: 'Polygon', coordinates: largest },
-  };
-};
-
-export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
+export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
   const [mainFeatures, setMainFeatures] = useState<ExtendedFeature[] | null>(
     null,
   );
@@ -189,6 +132,24 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
     ExtendedFeature[] | null
   >(null);
   const [hoveredCountyId, setHoveredCountyId] = useState<string | null>(null);
+
+  const mainCountyDisplayStates = useMemo(
+    () =>
+      (mainFeatures ?? []).map((county) => {
+        const countyName = county.properties?.name ?? '';
+        return {
+          county,
+          countyName,
+          ...getCountyDisplayState(
+            countyName,
+            county.properties?.id,
+            currentCityKey,
+            hoveredCountyId,
+          ),
+        };
+      }),
+    [mainFeatures, currentCityKey, hoveredCountyId],
+  );
 
   useEffect(() => {
     (async () => {
@@ -222,6 +183,18 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
   );
 
   const mainPathGenerator = geoPath().projection(mainProjection);
+
+  const getCountyHandlers = (
+    isInteractable: boolean,
+    cityKey: string,
+    countyId: string,
+  ) => ({
+    onClick: isInteractable ? () => onCitySelect(cityKey) : undefined,
+    onMouseEnter: isInteractable
+      ? () => setHoveredCountyId(countyId)
+      : undefined,
+    onMouseLeave: isInteractable ? () => setHoveredCountyId(null) : undefined,
+  });
 
   const offshoreRenderData = offshoreFeatures.map((offshoreFeature, index) => {
     const countyName = offshoreFeature.properties?.name;
@@ -258,11 +231,11 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
             ];
             const labelOffset = LABEL_OFFSETS[countyName] ?? [0, 0];
 
-            const { key, isInteractable, fillClass, textFillClass } =
+            const { cityKey, isInteractable, fillClass, textFillClass } =
               getCountyDisplayState(
                 countyName ?? '',
                 offshoreFeature.properties?.id,
-                currentCity,
+                currentCityKey,
                 hoveredCountyId,
               );
 
@@ -273,22 +246,18 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
                 className={
                   isInteractable ? 'cursor-pointer' : 'cursor-not-allowed'
                 }
-                onClick={isInteractable ? () => onCitySelect(key) : undefined}
-                onMouseEnter={
-                  isInteractable
-                    ? () => setHoveredCountyId(offshoreFeature.properties?.id)
-                    : undefined
-                }
-                onMouseLeave={
-                  isInteractable ? () => setHoveredCountyId(null) : undefined
-                }
+                {...getCountyHandlers(
+                  isInteractable,
+                  cityKey,
+                  offshoreFeature.properties?.id ?? '',
+                )}
               >
                 {polygons.map((polygon, index) => {
                   const [islandX, islandY] = islandOffsets[index] ?? [0, 0];
 
                   return (
                     <g
-                      key={`${key}-${index}`}
+                      key={`${cityKey}-${index}`}
                       transform={`translate(${islandX}, ${islandY})`}
                     >
                       <path
@@ -315,69 +284,47 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
         )}
       </g>
       <g>
-        {mainFeatures.map((county) => {
-          const { key, isInteractable, fillClass } = getCountyDisplayState(
-            county.properties?.name ?? '',
-            county.properties?.id,
-            currentCity,
-            hoveredCountyId,
-          );
+        {mainCountyDisplayStates.map(
+          ({ county, cityKey, isInteractable, fillClass }) => {
+            const countyId = county.properties?.id ?? '';
 
-          return (
-            <path
-              key={county.properties?.id}
-              d={mainPathGenerator(county) ?? ''}
-              stroke="white"
-              strokeWidth={1}
-              className={`${fillClass} ${isInteractable ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-              onClick={isInteractable ? () => onCitySelect(key) : undefined}
-              onMouseEnter={
-                isInteractable
-                  ? () => setHoveredCountyId(county.properties?.id)
-                  : undefined
-              }
-              onMouseLeave={
-                isInteractable ? () => setHoveredCountyId(null) : undefined
-              }
-            />
-          );
-        })}
-        {mainFeatures.map((county) => {
-          const countyName = county.properties?.name;
-          if (!countyName) return <text />;
+            return (
+              <path
+                key={countyId}
+                d={mainPathGenerator(county) ?? ''}
+                stroke="white"
+                strokeWidth={1}
+                className={`${fillClass} ${isInteractable ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                {...getCountyHandlers(isInteractable, cityKey, countyId)}
+              />
+            );
+          },
+        )}
+        {mainCountyDisplayStates.map(
+          ({ county, countyName, cityKey, isInteractable, textFillClass }) => {
+            const countyId = county.properties?.id ?? '';
+            const labelKey = `${countyId}-label`;
 
-          const { key, isInteractable, textFillClass } = getCountyDisplayState(
-            countyName,
-            county.properties?.id,
-            currentCity,
-            hoveredCountyId,
-          );
+            if (!countyName) return <text key={labelKey} />;
 
-          const centroid = mainPathGenerator.centroid(county);
-          const labelOffset = LABEL_OFFSETS[countyName] ?? [0, 0];
+            const centroid = mainPathGenerator.centroid(county);
+            const labelOffset = LABEL_OFFSETS[countyName] ?? [0, 0];
 
-          return (
-            <text
-              key={`${county.properties?.id}-label`}
-              x={centroid[0] + labelOffset[0]}
-              y={centroid[1] + labelOffset[1]}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              className={`text-xs ${textFillClass} ${isInteractable ? 'cursor-pointer' : 'pointer-events-none'}`}
-              onClick={isInteractable ? () => onCitySelect(key) : undefined}
-              onMouseEnter={
-                isInteractable
-                  ? () => setHoveredCountyId(county.properties?.id)
-                  : undefined
-              }
-              onMouseLeave={
-                isInteractable ? () => setHoveredCountyId(null) : undefined
-              }
-            >
-              {countyName}
-            </text>
-          );
-        })}
+            return (
+              <text
+                key={labelKey}
+                x={centroid[0] + labelOffset[0]}
+                y={centroid[1] + labelOffset[1]}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                className={`text-xs ${textFillClass} ${isInteractable ? 'cursor-pointer' : 'pointer-events-none'}`}
+                {...getCountyHandlers(isInteractable, cityKey, countyId)}
+              >
+                {countyName}
+              </text>
+            );
+          },
+        )}
       </g>
     </svg>
   );

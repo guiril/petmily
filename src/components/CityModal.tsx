@@ -24,7 +24,7 @@ export const CityModal = ({ isOpen, currentCity, onClose }: CityModalProps) => {
       <DialogTitle className="mb-4 text-center font-semibold text-gray-800">
         選擇城市
       </DialogTitle>
-      <TaiwanMap currentCity={currentCity} onCitySelect={handleCitySelect} />
+      <TaiwanMap currentCityKey={currentCity} onCitySelect={handleCitySelect} />
     </Modal>
   );
 };
