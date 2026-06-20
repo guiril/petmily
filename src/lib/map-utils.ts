@@ -14,7 +14,7 @@ export const toFeatureCollection = (
   return feature(topo, topo.objects.map) as ExtendedFeatureCollection;
 };
 
-export const polygonArea = (coordinates: Position[][]): number =>
+const polygonArea = (coordinates: Position[][]): number =>
   geoArea({ type: 'Polygon', coordinates });
 
 export const splitToPolygons = (
