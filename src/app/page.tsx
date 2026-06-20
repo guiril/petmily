@@ -1,14 +1,6 @@
-import { getVenuesByCity } from '@/services/venues';
-import { Header } from '@/components/Header';
-import { VenueLayout } from '@/components/VenueLayout';
+import { redirect } from 'next/navigation';
+import { AVAILABLE_CITIES } from '@/lib/cities';
 
-export default async function Home() {
-  const venues = (await getVenuesByCity('taichung')) ?? [];
-
-  return (
-    <div className="flex h-dvh flex-col bg-background">
-      <Header />
-      <VenueLayout venues={venues} />
-    </div>
-  );
+export default function Home() {
+  redirect(`/${AVAILABLE_CITIES[0].key}`);
 }

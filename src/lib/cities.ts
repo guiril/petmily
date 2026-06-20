@@ -13,7 +13,7 @@ interface CityConfig {
 export const CITIES = [
   {
     key: 'taipei',
-    name: '台北',
+    name: '臺北市',
     isAvailable: false,
     districts: [
       { key: 'beitou', name: '北投區' },
@@ -32,7 +32,7 @@ export const CITIES = [
   },
   {
     key: 'taichung',
-    name: '台中',
+    name: '臺中市',
     isAvailable: true,
     districts: [
       { key: 'zhongqu', name: '中區' },
@@ -66,7 +66,7 @@ export const CITIES = [
       { key: 'xinshe', name: '新社區' },
     ],
   },
-  { key: 'kaohsiung', name: '高雄', isAvailable: false, districts: [] },
+  { key: 'kaohsiung', name: '高雄市', isAvailable: false, districts: [] },
 ] as const satisfies CityConfig[];
 
 export const AVAILABLE_CITIES = CITIES.filter(({ isAvailable }) => isAvailable);
