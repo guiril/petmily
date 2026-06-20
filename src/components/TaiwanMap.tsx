@@ -76,6 +76,13 @@ interface TaiwanMapProps {
   onCitySelect: (cityKey: string) => void;
 }
 
+interface CountyDisplayState {
+  key: string;
+  isInteractable: boolean;
+  fillClass: string;
+  textFillClass: string;
+}
+
 const fetchTaiwanTopo = async (): Promise<Topology | undefined> => {
   try {
     return (await fetch(TAIWAN_TOPO_URL)).json();
@@ -105,6 +112,32 @@ const splitToPolygons = (countyFeature: ExtendedFeature): ExtendedFeature[] => {
 
 const isOffshoreCounty = (countyFeature: ExtendedFeature): boolean =>
   OFFSHORE_COUNTY_NAMES.includes(countyFeature.properties?.name);
+
+const getCountyDisplayState = (
+  countyName: string,
+  countyId: string,
+  currentCity: string,
+  hoveredCountyId: string | null,
+): CountyDisplayState => {
+  const cityConfig = CITIES.find((config) => config.name === countyName);
+  const configKey = cityConfig?.key ?? '';
+  const isCurrentCity = configKey === currentCity;
+  const isInteractable = (cityConfig?.isAvailable ?? false) && !isCurrentCity;
+  const isHovered = hoveredCountyId === countyId;
+
+  const fillClass = isCurrentCity
+    ? 'fill-orange-400'
+    : isInteractable && isHovered
+      ? 'fill-orange-200'
+      : 'fill-stone-200';
+
+  const textFillClass =
+    isCurrentCity || (isInteractable && isHovered)
+      ? 'fill-ink-sub'
+      : 'fill-ink-muted';
+
+  return { key: configKey, isInteractable, fillClass, textFillClass };
+};
 
 const keepLargestPolygon = (
   countyFeature: ExtendedFeature,
@@ -214,25 +247,13 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
             ];
             const labelOffset = LABEL_OFFSETS[countyName] ?? [0, 0];
 
-            const city = CITIES.find(
-              (cityConfig) => cityConfig.name === countyName,
-            );
-            const isCurrentCity = city?.key === currentCity;
-            const isInteractable =
-              (city?.isAvailable ?? false) && !isCurrentCity;
-            const isHovered =
-              hoveredCountyId === offshoreFeature.properties?.id;
-
-            const fillClass = isCurrentCity
-              ? 'fill-orange-400'
-              : isInteractable && isHovered
-                ? 'fill-orange-200'
-                : 'fill-stone-200';
-
-            const textFillClass =
-              isCurrentCity || (isInteractable && isHovered)
-                ? 'fill-ink-sub'
-                : 'fill-ink-muted';
+            const { key, isInteractable, fillClass, textFillClass } =
+              getCountyDisplayState(
+                countyName ?? '',
+                offshoreFeature.properties?.id,
+                currentCity,
+                hoveredCountyId,
+              );
 
             return (
               <g
@@ -241,9 +262,7 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
                 className={
                   isInteractable ? 'cursor-pointer' : 'cursor-not-allowed'
                 }
-                onClick={
-                  isInteractable ? () => onCitySelect(city!.key) : undefined
-                }
+                onClick={isInteractable ? () => onCitySelect(key) : undefined}
                 onMouseEnter={
                   isInteractable
                     ? () => setHoveredCountyId(offshoreFeature.properties?.id)
@@ -258,7 +277,7 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
 
                   return (
                     <g
-                      key={`${countyName}-${index}`}
+                      key={`${key}-${index}`}
                       transform={`translate(${islandX}, ${islandY})`}
                     >
                       <path
@@ -286,19 +305,12 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
       </g>
       <g>
         {mainFeatures.map((county) => {
-          const countyName = county.properties?.name;
-          const city = CITIES.find(
-            (cityConfig) => cityConfig.name === countyName,
+          const { key, isInteractable, fillClass } = getCountyDisplayState(
+            county.properties?.name ?? '',
+            county.properties?.id,
+            currentCity,
+            hoveredCountyId,
           );
-          const isCurrentCity = city?.key === currentCity;
-          const isInteractable = (city?.isAvailable ?? false) && !isCurrentCity;
-          const isHovered = hoveredCountyId === county.properties?.id;
-
-          const fillClass = isCurrentCity
-            ? 'fill-orange-400'
-            : isInteractable && isHovered
-              ? 'fill-orange-200'
-              : 'fill-stone-200';
 
           return (
             <path
@@ -307,9 +319,7 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
               stroke="white"
               strokeWidth={1}
               className={`${fillClass} ${isInteractable ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-              onClick={
-                isInteractable ? () => onCitySelect(city!.key) : undefined
-              }
+              onClick={isInteractable ? () => onCitySelect(key) : undefined}
               onMouseEnter={
                 isInteractable
                   ? () => setHoveredCountyId(county.properties?.id)
@@ -323,21 +333,17 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
         })}
         {mainFeatures.map((county) => {
           const countyName = county.properties?.name;
-          if (!countyName) return null;
-          const city = CITIES.find(
-            (cityConfig) => cityConfig.name === countyName,
+          if (!countyName) return <text />;
+
+          const { key, isInteractable, textFillClass } = getCountyDisplayState(
+            countyName,
+            county.properties?.id,
+            currentCity,
+            hoveredCountyId,
           );
-          const isCurrentCity = city?.key === currentCity;
-          const isInteractable = (city?.isAvailable ?? false) && !isCurrentCity;
-          const isHovered = hoveredCountyId === county.properties?.id;
 
           const centroid = mainPathGenerator.centroid(county);
           const labelOffset = LABEL_OFFSETS[countyName] ?? [0, 0];
-
-          const textFillClass =
-            isCurrentCity || (isInteractable && isHovered)
-              ? 'fill-ink-sub'
-              : 'fill-ink-muted';
 
           return (
             <text
@@ -347,9 +353,7 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
               textAnchor="middle"
               dominantBaseline="middle"
               className={`text-xs ${textFillClass} ${isInteractable ? 'cursor-pointer' : 'pointer-events-none'}`}
-              onClick={
-                isInteractable ? () => onCitySelect(city!.key) : undefined
-              }
+              onClick={isInteractable ? () => onCitySelect(key) : undefined}
               onMouseEnter={
                 isInteractable
                   ? () => setHoveredCountyId(county.properties?.id)
