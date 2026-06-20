@@ -67,6 +67,9 @@ export const CITIES = [
     ],
   },
   { key: 'kaohsiung', name: '高雄市', isAvailable: false, districts: [] },
+  { key: 'penghu', name: '澎湖縣', isAvailable: false, districts: [] },
+  { key: 'kinmen', name: '金門縣', isAvailable: false, districts: [] },
+  { key: 'lienchiang', name: '連江縣', isAvailable: false, districts: [] },
 ] as const satisfies CityConfig[];
 
 export const AVAILABLE_CITIES = CITIES.filter(({ isAvailable }) => isAvailable);

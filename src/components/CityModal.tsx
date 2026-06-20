@@ -1,5 +1,6 @@
 'use client';
 
+import { DialogTitle } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import { Modal } from '@/components/common/Modal';
 import { TaiwanMap } from './TaiwanMap';
@@ -19,8 +20,10 @@ export const CityModal = ({ isOpen, currentCity, onClose }: CityModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <h2 className="mb-4 text-center font-semibold text-gray-800">選擇城市</h2>
+    <Modal isOpen={isOpen} onClose={onClose} panelClassName="max-w-4xl w-full">
+      <DialogTitle className="mb-4 text-center font-semibold text-gray-800">
+        選擇城市
+      </DialogTitle>
       <TaiwanMap currentCity={currentCity} onCitySelect={handleCitySelect} />
     </Modal>
   );
