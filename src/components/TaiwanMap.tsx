@@ -1,26 +1,19 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import type { ExtendedFeature } from 'd3-geo';
-import type { Topology } from 'topojson-specification';
+import { useState, useMemo } from 'react';
 import { geoMercator, geoPath } from 'd3-geo';
 import { CITIES } from '@/lib/cities';
 import {
-  toFeatureCollection,
   splitToPolygons,
   scaleProjectionAroundCentroid,
-  keepLargestPolygon,
 } from '@/lib/map-utils';
-
-const TAIWAN_TOPO_URL = '/geo/taiwan-country.topo.json';
+import { useTaiwanFeatures } from '@/hooks/useTaiwanFeatures';
 
 const SVG_WIDTH = 800;
 const SVG_HEIGHT = 600;
 const OFFSHORE_WIDTH = 250;
 const OFFSHORE_HEIGHT = SVG_HEIGHT / 3;
 const MAIN_X_START = OFFSHORE_WIDTH + 8;
-
-const OFFSHORE_COUNTY_NAMES = ['連江縣', '金門縣', '澎湖縣'];
 
 const OFFSHORE_COUNTY_SCALES: Record<string, number> = {
   連江縣: 1.25,
@@ -87,17 +80,6 @@ interface CountyDisplayState {
   textFillClass: string;
 }
 
-const fetchTaiwanTopo = async (): Promise<Topology | undefined> => {
-  try {
-    return (await fetch(TAIWAN_TOPO_URL)).json();
-  } catch (err) {
-    console.error('Failed to load map.', err);
-  }
-};
-
-const isOffshoreCounty = (countyFeature: ExtendedFeature): boolean =>
-  OFFSHORE_COUNTY_NAMES.includes(countyFeature.properties?.name);
-
 const getCountyDisplayState = (
   countyName: string,
   countyId: string,
@@ -125,12 +107,7 @@ const getCountyDisplayState = (
 };
 
 export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
-  const [mainFeatures, setMainFeatures] = useState<ExtendedFeature[] | null>(
-    null,
-  );
-  const [offshoreFeatures, setOffshoreFeatures] = useState<
-    ExtendedFeature[] | null
-  >(null);
+  const { mainFeatures, offshoreFeatures } = useTaiwanFeatures();
   const [hoveredCountyId, setHoveredCountyId] = useState<string | null>(null);
 
   const mainCountyDisplayStates = useMemo(
@@ -150,24 +127,6 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
       }),
     [mainFeatures, currentCityKey, hoveredCountyId],
   );
-
-  useEffect(() => {
-    (async () => {
-      const topoData = await fetchTaiwanTopo();
-
-      if (!topoData) return;
-
-      const geoData = toFeatureCollection(topoData);
-
-      setMainFeatures(
-        geoData.features
-          .filter((countyFeature) => !isOffshoreCounty(countyFeature))
-          .map(keepLargestPolygon),
-      );
-
-      setOffshoreFeatures(geoData.features.filter(isOffshoreCounty));
-    })();
-  }, []);
 
   if (!mainFeatures || !offshoreFeatures) return <svg />;
 
@@ -196,7 +155,7 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
     onMouseLeave: isInteractable ? () => setHoveredCountyId(null) : undefined,
   });
 
-  const offshoreRenderData = offshoreFeatures.map((offshoreFeature, index) => {
+  const offshoreRenderItems = offshoreFeatures.map((offshoreFeature, index) => {
     const countyName = offshoreFeature.properties?.name;
     const projection = geoMercator().fitExtent(
       [
@@ -221,7 +180,7 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
   return (
     <svg viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`} className="block w-full">
       <g>
-        {offshoreRenderData.map(
+        {offshoreRenderItems.map(
           ({ offshoreFeature, pathGenerator, polygons }) => {
             const centroid = pathGenerator.centroid(offshoreFeature);
             const countyName = offshoreFeature.properties?.name;
