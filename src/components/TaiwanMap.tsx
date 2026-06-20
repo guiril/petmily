@@ -128,7 +128,7 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
     [mainFeatures, currentCityKey, hoveredCountyId],
   );
 
-  const mainGeo = useMemo(() => {
+  const mainMap = useMemo(() => {
     if (!mainFeatures) return null;
 
     const projection = geoMercator().fitExtent(
@@ -141,7 +141,7 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
     return { projection, pathGenerator: geoPath().projection(projection) };
   }, [mainFeatures]);
 
-  const offshoreRenderItems = useMemo(() => {
+  const offshoreMap = useMemo(() => {
     if (!offshoreFeatures) return null;
 
     return offshoreFeatures.map((offshoreFeature, index) => {
@@ -164,9 +164,9 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
     });
   }, [offshoreFeatures]);
 
-  if (!mainGeo || !offshoreRenderItems) return <svg />;
+  if (!mainMap || !offshoreMap) return <svg />;
 
-  const { pathGenerator: mainPathGenerator } = mainGeo;
+  const { pathGenerator: mainPathGenerator } = mainMap;
 
   const getCountyHandlers = (
     isInteractable: boolean,
@@ -183,67 +183,65 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
   return (
     <svg viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`} className="block w-full">
       <g>
-        {offshoreRenderItems.map(
-          ({ offshoreFeature, pathGenerator, polygons }) => {
-            const centroid = pathGenerator.centroid(offshoreFeature);
-            const countyName = offshoreFeature.properties?.name;
-            const islandOffsets = OFFSHORE_ISLAND_OFFSETS[countyName] ?? {};
-            const [countyX, countyY] = OFFSHORE_COUNTY_OFFSETS[countyName] ?? [
-              0, 0,
-            ];
-            const labelOffset = LABEL_OFFSETS[countyName] ?? [0, 0];
+        {offshoreMap.map(({ offshoreFeature, pathGenerator, polygons }) => {
+          const centroid = pathGenerator.centroid(offshoreFeature);
+          const countyName = offshoreFeature.properties?.name;
+          const islandOffsets = OFFSHORE_ISLAND_OFFSETS[countyName] ?? {};
+          const [countyX, countyY] = OFFSHORE_COUNTY_OFFSETS[countyName] ?? [
+            0, 0,
+          ];
+          const labelOffset = LABEL_OFFSETS[countyName] ?? [0, 0];
 
-            const { cityKey, isInteractable, fillClass, textFillClass } =
-              getCountyDisplayState(
-                countyName ?? '',
-                offshoreFeature.properties?.id,
-                currentCityKey,
-                hoveredCountyId,
-              );
-
-            return (
-              <g
-                key={offshoreFeature.properties?.id}
-                transform={`translate(${countyX}, ${countyY})`}
-                className={
-                  isInteractable ? 'cursor-pointer' : 'cursor-not-allowed'
-                }
-                {...getCountyHandlers(
-                  isInteractable,
-                  cityKey,
-                  offshoreFeature.properties?.id ?? '',
-                )}
-              >
-                {polygons.map((polygon, index) => {
-                  const [islandX, islandY] = islandOffsets[index] ?? [0, 0];
-
-                  return (
-                    <g
-                      key={`${countyName}-${index}`}
-                      transform={`translate(${islandX}, ${islandY})`}
-                    >
-                      <path
-                        d={pathGenerator(polygon) ?? ''}
-                        stroke="white"
-                        strokeWidth={1}
-                        className={fillClass}
-                      />
-                    </g>
-                  );
-                })}
-                <text
-                  x={centroid[0] + labelOffset[0]}
-                  y={centroid[1] + labelOffset[1]}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  className={`text-xs ${textFillClass}`}
-                >
-                  {countyName}
-                </text>
-              </g>
+          const { cityKey, isInteractable, fillClass, textFillClass } =
+            getCountyDisplayState(
+              countyName ?? '',
+              offshoreFeature.properties?.id,
+              currentCityKey,
+              hoveredCountyId,
             );
-          },
-        )}
+
+          return (
+            <g
+              key={offshoreFeature.properties?.id}
+              transform={`translate(${countyX}, ${countyY})`}
+              className={
+                isInteractable ? 'cursor-pointer' : 'cursor-not-allowed'
+              }
+              {...getCountyHandlers(
+                isInteractable,
+                cityKey,
+                offshoreFeature.properties?.id ?? '',
+              )}
+            >
+              {polygons.map((polygon, index) => {
+                const [islandX, islandY] = islandOffsets[index] ?? [0, 0];
+
+                return (
+                  <g
+                    key={`${countyName}-${index}`}
+                    transform={`translate(${islandX}, ${islandY})`}
+                  >
+                    <path
+                      d={pathGenerator(polygon) ?? ''}
+                      stroke="white"
+                      strokeWidth={1}
+                      className={fillClass}
+                    />
+                  </g>
+                );
+              })}
+              <text
+                x={centroid[0] + labelOffset[0]}
+                y={centroid[1] + labelOffset[1]}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                className={`text-xs ${textFillClass}`}
+              >
+                {countyName}
+              </text>
+            </g>
+          );
+        })}
       </g>
       <g>
         {mainCountyDisplayStates.map(
