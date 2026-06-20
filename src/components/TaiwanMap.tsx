@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { ExtendedFeatureCollection, ExtendedFeature } from 'd3-geo';
+import type {
+  ExtendedFeatureCollection,
+  ExtendedFeature,
+  GeoProjection,
+} from 'd3-geo';
 import type { Position, Polygon } from 'geojson';
 import type { Topology } from 'topojson-specification';
 import { feature } from 'topojson-client';
@@ -139,6 +143,25 @@ const getCountyDisplayState = (
   return { key: configKey, isInteractable, fillClass, textFillClass };
 };
 
+const scaleProjectionAroundCentroid = (
+  projection: GeoProjection,
+  feature: ExtendedFeature,
+  scaleFactor: number,
+): void => {
+  if (scaleFactor === 1) return;
+
+  const [centroidX, centroidY] = geoPath()
+    .projection(projection)
+    .centroid(feature);
+  const [translateX, translateY] = projection.translate();
+
+  projection.scale(projection.scale() * scaleFactor);
+  projection.translate([
+    centroidX * (1 - scaleFactor) + scaleFactor * translateX,
+    centroidY * (1 - scaleFactor) + scaleFactor * translateY,
+  ]);
+};
+
 const keepLargestPolygon = (
   countyFeature: ExtendedFeature,
 ): ExtendedFeature => {
@@ -214,19 +237,7 @@ export const TaiwanMap = ({ currentCity, onCitySelect }: TaiwanMapProps) => {
     );
 
     const scaleFactor = OFFSHORE_COUNTY_SCALES[countyName] ?? 1;
-
-    if (scaleFactor !== 1) {
-      const pathGeneratorForCentroid = geoPath().projection(projection);
-      const [centroidX, centroidY] =
-        pathGeneratorForCentroid.centroid(offshoreFeature);
-      const [translateX, translateY] = projection.translate();
-
-      projection.scale(projection.scale() * scaleFactor);
-      projection.translate([
-        centroidX * (1 - scaleFactor) + scaleFactor * translateX,
-        centroidY * (1 - scaleFactor) + scaleFactor * translateY,
-      ]);
-    }
+    scaleProjectionAroundCentroid(projection, offshoreFeature, scaleFactor);
 
     const pathGenerator = geoPath().projection(projection);
     const polygons = splitToPolygons(offshoreFeature);
