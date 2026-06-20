@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { AVAILABLE_CITIES } from '@/lib/cities';
 
 export default function Home() {
-  redirect('/taichung');
+  redirect(`/${AVAILABLE_CITIES[0].key}`);
 }
