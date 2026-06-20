@@ -128,20 +128,45 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
     [mainFeatures, currentCityKey, hoveredCountyId],
   );
 
-  if (!mainFeatures || !offshoreFeatures) return <svg />;
+  const mainGeo = useMemo(() => {
+    if (!mainFeatures) return null;
 
-  const mainProjection = geoMercator().fitExtent(
-    [
-      [MAIN_X_START, 0],
-      [SVG_WIDTH, SVG_HEIGHT],
-    ],
-    {
-      type: 'FeatureCollection',
-      features: mainFeatures,
-    },
-  );
+    const projection = geoMercator().fitExtent(
+      [
+        [MAIN_X_START, 0],
+        [SVG_WIDTH, SVG_HEIGHT],
+      ],
+      { type: 'FeatureCollection', features: mainFeatures },
+    );
+    return { projection, pathGenerator: geoPath().projection(projection) };
+  }, [mainFeatures]);
 
-  const mainPathGenerator = geoPath().projection(mainProjection);
+  const offshoreRenderItems = useMemo(() => {
+    if (!offshoreFeatures) return null;
+
+    return offshoreFeatures.map((offshoreFeature, index) => {
+      const countyName = offshoreFeature.properties?.name;
+      const projection = geoMercator().fitExtent(
+        [
+          [0, index * OFFSHORE_HEIGHT],
+          [OFFSHORE_WIDTH, index * OFFSHORE_HEIGHT + OFFSHORE_HEIGHT],
+        ],
+        { type: 'FeatureCollection', features: [offshoreFeature] },
+      );
+
+      const scaleFactor = OFFSHORE_COUNTY_SCALES[countyName] ?? 1;
+      scaleProjectionAroundCentroid(projection, offshoreFeature, scaleFactor);
+
+      const pathGenerator = geoPath().projection(projection);
+      const polygons = splitToPolygons(offshoreFeature);
+
+      return { offshoreFeature, pathGenerator, polygons };
+    });
+  }, [offshoreFeatures]);
+
+  if (!mainGeo || !offshoreRenderItems) return <svg />;
+
+  const { pathGenerator: mainPathGenerator } = mainGeo;
 
   const getCountyHandlers = (
     isInteractable: boolean,
@@ -153,28 +178,6 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
       ? () => setHoveredCountyId(countyId)
       : undefined,
     onMouseLeave: isInteractable ? () => setHoveredCountyId(null) : undefined,
-  });
-
-  const offshoreRenderItems = offshoreFeatures.map((offshoreFeature, index) => {
-    const countyName = offshoreFeature.properties?.name;
-    const projection = geoMercator().fitExtent(
-      [
-        [0, index * OFFSHORE_HEIGHT],
-        [OFFSHORE_WIDTH, index * OFFSHORE_HEIGHT + OFFSHORE_HEIGHT],
-      ],
-      {
-        type: 'FeatureCollection',
-        features: [offshoreFeature],
-      },
-    );
-
-    const scaleFactor = OFFSHORE_COUNTY_SCALES[countyName] ?? 1;
-    scaleProjectionAroundCentroid(projection, offshoreFeature, scaleFactor);
-
-    const pathGenerator = geoPath().projection(projection);
-    const polygons = splitToPolygons(offshoreFeature);
-
-    return { offshoreFeature, pathGenerator, polygons };
   });
 
   return (
@@ -216,7 +219,7 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
 
                   return (
                     <g
-                      key={`${cityKey}-${index}`}
+                      key={`${countyName}-${index}`}
                       transform={`translate(${islandX}, ${islandY})`}
                     >
                       <path
@@ -264,7 +267,7 @@ export const TaiwanMap = ({ currentCityKey, onCitySelect }: TaiwanMapProps) => {
             const countyId = county.properties?.id ?? '';
             const labelKey = `${countyId}-label`;
 
-            if (!countyName) return <text key={labelKey} />;
+            if (!countyName) return null;
 
             const centroid = mainPathGenerator.centroid(county);
             const labelOffset = LABEL_OFFSETS[countyName] ?? [0, 0];
