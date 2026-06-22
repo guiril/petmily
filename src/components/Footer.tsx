@@ -7,13 +7,23 @@ export const Footer = () => {
         <Image src="/images/logo-white.svg" width={81} height={20} alt="" />
         <div className="text-xs font-semibold text-[#A6A09B] max-lg:flex max-lg:flex-col max-lg:gap-2 max-lg:items-end">
           <span>Data sourced from </span>
-          <a
-            href="https://www.animal.taichung.gov.tw/1521448/1521512/1521537/1521539"
-            target="_blank"
-            className="text-white underline max-lg:text-sm"
-          >
-            臺中市動物保護防疫處
-          </a>
+          <div className="flex gap-2">
+            <a
+              href="https://www.tcapo.gov.taipei/cp.aspx?n=0F4589261BDCB49B&s=E69595547CD21496"
+              target="_blank"
+              className="text-white underline max-lg:text-sm"
+            >
+              臺北市動物保護處
+            </a>
+            <span>、</span>
+            <a
+              href="https://www.animal.taichung.gov.tw/1521448/1521512/1521537/1521539"
+              target="_blank"
+              className="text-white underline max-lg:text-sm"
+            >
+              臺中市動物保護防疫處
+            </a>
+          </div>
         </div>
       </div>
       <p className="text-xs text-[#A6A09B] max-lg:text-center">

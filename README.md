@@ -2,6 +2,8 @@
 
 A web app that helps pet owners in Taiwan discover pet-friendly venues, built with data sourced from [臺北市動物保護處](https://www.tcapo.gov.taipei/cp.aspx?n=0F4589261BDCB49B&s=E69595547CD21496)、[臺中市動物保護防疫處](https://www.animal.taichung.gov.tw/1521448/1521512/1521537/1521539).
 
+Taiwan map shape data from [taiwan.md/taiwan-shape](https://taiwan.md/taiwan-shape/) (MIT License).
+
 ## Demo
 
 | Desktop | Mobile |
