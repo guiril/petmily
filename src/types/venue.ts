@@ -20,13 +20,15 @@ export interface Venue {
   imageUrl?: string;
 }
 
-export type RawVenue = Omit<Venue, 'city'>;
+export type RawVenue = Omit<Venue, 'city' | 'petTypes'> & {
+  petTypes?: string[];
+};
 
 export interface VenuesData {
   updatedAt: number;
   venues: {
     taichung: RawVenue[];
-    taipei?: RawVenue[];
+    taipei: RawVenue[];
     kaohsiung?: RawVenue[];
   };
 }

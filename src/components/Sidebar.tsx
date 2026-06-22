@@ -2,10 +2,11 @@
 
 import type { FilterState } from '@/types/filters';
 import { AVAILABLE_CITIES } from '@/lib/cities';
-import { FILTER_CONFIGS } from '@/lib/filters';
+import { getFilterConfigs } from '@/lib/filters';
 import { FilterSection } from './FilterSection';
 
 interface SidebarProps {
+  currentCity: string;
   selectedFilters: FilterState;
   selectedCityDistricts: Record<string, Set<string>>;
   onClearAllFilters: () => void;
@@ -14,12 +15,15 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({
+  currentCity,
   selectedFilters,
   selectedCityDistricts,
   onClearAllFilters,
   onToggle,
   onToggleCityDistrict,
 }: SidebarProps) => {
+  const filterConfigs = getFilterConfigs(currentCity);
+
   return (
     <aside className="w-65 px-4 flex shrink-0 flex-col border-r border-orange-200 bg-white overflow-y-hidden hover:overflow-y-auto [scrollbar-gutter:stable]">
       <div className="pt-6 pb-4 flex justify-between items-center">
@@ -33,16 +37,18 @@ export const Sidebar = ({
           全部清除
         </button>
       </div>
-      {AVAILABLE_CITIES.map(({ key, name, districts }) => (
-        <FilterSection
-          key={key}
-          name={name}
-          options={districts}
-          selected={selectedCityDistricts[key] ?? new Set<string>()}
-          onToggle={(value) => onToggleCityDistrict(key, value)}
-        />
-      ))}
-      {FILTER_CONFIGS.map(({ key, name, options }) => (
+      {AVAILABLE_CITIES.filter(({ key }) => key === currentCity).map(
+        ({ key, name, districts }) => (
+          <FilterSection
+            key={key}
+            name={name}
+            options={districts}
+            selected={selectedCityDistricts[key] ?? new Set<string>()}
+            onToggle={(value) => onToggleCityDistrict(key, value)}
+          />
+        ),
+      )}
+      {filterConfigs.map(({ key, name, options }) => (
         <FilterSection
           key={key}
           name={name}
