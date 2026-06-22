@@ -62,22 +62,24 @@ export const VenueCard = ({ venue }: VenueCardProps) => {
         className={`relative h-46.25 bg-center bg-no-repeat rounded-t-2xl max-lg:w-[37.9%] max-lg:h-auto max-lg:rounded-xl ${
           imageUrl
             ? 'bg-cover'
-            : 'bg-white bg-[url(/images/logo-2.svg)] bg-contain'
+            : 'bg-[#F5F5F4] bg-[url(/images/logo-2.svg)] bg-size-[72px]'
         }`}
       >
-        <ul className="absolute left-4 bottom-3 flex gap-2 max-lg:left-3 max-lg:bottom-2">
-          {petTypes.map((type) => {
-            const icon = PET_TYPE_ICONS[type];
-            return (
-              <li
-                key={type}
-                className={`w-7 h-7 flex justify-center items-center rounded-full ${icon.bgColor} ${icon.borderColor} max-lg:w-6 max-lg:h-6`}
-              >
-                <Image src={icon.src} width={18} height={18} alt={type} />
-              </li>
-            );
-          })}
-        </ul>
+        {petTypes.length > 0 && (
+          <ul className="absolute left-4 bottom-3 flex gap-2 max-lg:left-3 max-lg:bottom-2">
+            {petTypes.map((type) => {
+              const icon = PET_TYPE_ICONS[type];
+              return (
+                <li
+                  key={type}
+                  className={`w-7 h-7 flex justify-center items-center rounded-full ${icon.bgColor} ${icon.borderColor} max-lg:w-6 max-lg:h-6`}
+                >
+                  <Image src={icon.src} width={18} height={18} alt={type} />
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
       <div className="p-4 flex flex-col justify-between flex-1 max-lg:p-3 overflow-hidden">
         <div className="flex flex-col flex-1">

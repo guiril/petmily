@@ -41,6 +41,7 @@ export const VenueLayout = ({ currentCity, venues }: VenueLayoutProps) => {
       <div className="flex flex-1 overflow-hidden">
         <div className="max-lg:hidden flex">
           <Sidebar
+            currentCity={currentCity}
             selectedFilters={selectedFilters}
             selectedCityDistricts={selectedCityDistricts}
             onClearAllFilters={handleClearAll}
@@ -59,6 +60,7 @@ export const VenueLayout = ({ currentCity, venues }: VenueLayoutProps) => {
         />
         <BottomSheet
           isOpen={isSheetOpen}
+          currentCity={currentCity}
           selectedFilters={selectedFilters}
           selectedCityDistricts={selectedCityDistricts}
           filteredCount={filteredCount}

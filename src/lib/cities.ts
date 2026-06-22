@@ -7,6 +7,7 @@ interface CityConfig {
   key: string;
   name: string;
   isAvailable: boolean;
+  hasPetTypes: boolean;
   districts: CityDistrict[];
 }
 
@@ -14,7 +15,8 @@ export const CITIES = [
   {
     key: 'taipei',
     name: '臺北市',
-    isAvailable: false,
+    isAvailable: true,
+    hasPetTypes: false,
     districts: [
       { key: 'beitou', name: '北投區' },
       { key: 'shilin', name: '士林區' },
@@ -34,6 +36,7 @@ export const CITIES = [
     key: 'taichung',
     name: '臺中市',
     isAvailable: true,
+    hasPetTypes: true,
     districts: [
       { key: 'zhongqu', name: '中區' },
       { key: 'dongqu', name: '東區' },
@@ -66,7 +69,13 @@ export const CITIES = [
       { key: 'xinshe', name: '新社區' },
     ],
   },
-  { key: 'kaohsiung', name: '高雄市', isAvailable: false, districts: [] },
+  {
+    key: 'kaohsiung',
+    name: '高雄市',
+    isAvailable: false,
+    hasPetTypes: false,
+    districts: [],
+  },
 ] as const satisfies CityConfig[];
 
 export const AVAILABLE_CITIES = CITIES.filter(({ isAvailable }) => isAvailable);

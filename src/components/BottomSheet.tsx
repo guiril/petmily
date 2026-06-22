@@ -3,11 +3,12 @@
 import Image from 'next/image';
 import type { FilterState } from '@/types/filters';
 import { AVAILABLE_CITIES } from '@/lib/cities';
-import { FILTER_CONFIGS } from '@/lib/filters';
+import { getFilterConfigs } from '@/lib/filters';
 import { FilterSection } from './FilterSection';
 
 interface BottomSheetProps {
   isOpen: boolean;
+  currentCity: string;
   selectedFilters: FilterState;
   selectedCityDistricts: Record<string, Set<string>>;
   filteredCount: number;
@@ -19,6 +20,7 @@ interface BottomSheetProps {
 
 export const BottomSheet = ({
   isOpen,
+  currentCity,
   selectedFilters,
   selectedCityDistricts,
   filteredCount,
@@ -27,6 +29,8 @@ export const BottomSheet = ({
   onToggle,
   onToggleCityDistrict,
 }: BottomSheetProps) => {
+  const filterConfigs = getFilterConfigs(currentCity);
+
   return (
     <div
       className={`fixed inset-0 z-50 hidden max-lg:block ${
@@ -58,16 +62,18 @@ export const BottomSheet = ({
         </div>
         <div className="flex-1 overflow-y-auto px-4 pb-29.75">
           <div className="flex flex-col">
-            {AVAILABLE_CITIES.map(({ key, name, districts }) => (
-              <FilterSection
-                key={key}
-                name={name}
-                options={districts}
-                selected={selectedCityDistricts[key] ?? new Set<string>()}
-                onToggle={(value) => onToggleCityDistrict(key, value)}
-              />
-            ))}
-            {FILTER_CONFIGS.map(({ key, name, options }) => (
+            {AVAILABLE_CITIES.filter(({ key }) => key === currentCity).map(
+              ({ key, name, districts }) => (
+                <FilterSection
+                  key={key}
+                  name={name}
+                  options={districts}
+                  selected={selectedCityDistricts[key] ?? new Set<string>()}
+                  onToggle={(value) => onToggleCityDistrict(key, value)}
+                />
+              ),
+            )}
+            {filterConfigs.map(({ key, name, options }) => (
               <FilterSection
                 key={key}
                 name={name}

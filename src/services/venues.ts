@@ -22,7 +22,11 @@ export const getAllVenues = async (): Promise<Venue[]> => {
   ][];
 
   return entries.flatMap(([city, venues]) =>
-    (venues ?? []).map((venue) => ({ ...venue, city })),
+    (venues ?? []).map((venue) => ({
+      ...venue,
+      city,
+      petTypes: venue.petTypes ?? [],
+    })),
   );
 };
 
@@ -35,5 +39,9 @@ export const getVenuesByCity = async (
 
   if (!cityVenues) return null;
 
-  return cityVenues.map((venue) => ({ ...venue, city: cityKey }));
+  return cityVenues.map((venue) => ({
+    ...venue,
+    city: cityKey,
+    petTypes: venue.petTypes ?? [],
+  }));
 };

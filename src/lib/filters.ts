@@ -1,5 +1,6 @@
 import type { FilterOption, FilterState } from '@/types/filters';
 import type { Venue } from '@/types/venue';
+import { CITIES } from '@/lib/cities';
 import { hasOverlap } from './utils';
 
 interface FilterConfig {
@@ -30,6 +31,14 @@ export const FILTER_CONFIGS: FilterConfig[] = [
     ],
   },
 ];
+
+export const getFilterConfigs = (cityKey: string) => {
+  const cityConfig = CITIES.find((city) => city.key === cityKey);
+
+  if (cityConfig?.hasPetTypes) return FILTER_CONFIGS;
+
+  return FILTER_CONFIGS.filter((config) => config.key !== 'petTypes');
+};
 
 const matchesTypes = (types: string[], selected: Set<string>): boolean =>
   selected.size === 0 || hasOverlap(types, selected);
