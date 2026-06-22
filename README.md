@@ -31,6 +31,6 @@ Live site: [petmily-flame.vercel.app](https://petmily-flame.vercel.app)
 - **Next.js 16** — App Router、Server Components 讀取靜態 JSON
 - **TypeScript** — 定義元件、hooks 與資料的型別
 - **Tailwind CSS v4** — utility-first 響應式設計
-- **d3-geo + TopoJSON** — 繪製臺灣地圖
+- **d3-geo + TopoJSON** — 繪製臺灣行政區 SVG 地圖
 - **Headless UI** — 使用 Modal 元件
 - **Vercel** — 部署與 Deploy Hook
