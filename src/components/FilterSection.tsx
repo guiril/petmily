@@ -55,10 +55,10 @@ export const FilterSection = ({
           {visibleOptions.map(({ key, name }) => (
             <label
               key={key}
-              className={`flex justify-center items-center gap-2.5 py-3 text-center border border-[#E7E5E4] rounded-[10px] cursor-pointer ${
+              className={`flex justify-center items-center gap-2.5 py-3 text-center border border-stone-200 rounded-control cursor-pointer ${
                 selected.has(name)
-                  ? 'text-white bg-[#292524] border-transparent'
-                  : 'text-[#57534D] bg-white hover:bg-[#E7E5E4] active:bg-[#E7E5E4]'
+                  ? 'text-white bg-stone-800 border-transparent'
+                  : 'text-ink-sub bg-white hover:bg-stone-200 active:bg-stone-200'
               }`}
             >
               <input
@@ -73,7 +73,7 @@ export const FilterSection = ({
           {hasMore && (
             <button
               type="button"
-              className="col-span-2 w-full py-3 mt-2 text-sm font-bold text-[#44403B] rounded-lg bg-[#F5F5F4] cursor-pointer"
+              className="col-span-2 w-full py-3 mt-2 text-sm font-bold text-stone-700 rounded-lg bg-stone-100 cursor-pointer"
               onClick={() => setIsExpanded(!isExpanded)}
             >
               {isExpanded ? '顯示較少' : '顯示更多'}

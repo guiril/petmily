@@ -20,12 +20,12 @@ export const Header = ({ city, onOpenCityModal }: HeaderProps) => {
       </h1>
       <button
         type="button"
-        className="flex items-center gap-1.5 px-3 py-2 rounded-[10px] border border-[#E7E5E4] text-sm font-medium text-[#57534D] bg-white hover:bg-[#E7E5E4] cursor-pointer"
+        className="flex items-center gap-1.5 px-3 py-2 rounded-control border border-stone-200 text-sm font-medium text-ink-sub bg-white hover:bg-stone-200 cursor-pointer"
         onClick={onOpenCityModal}
       >
         <Image src="/images/location.svg" width={20} height={20} alt="" />
         {cityName}
-        <span className="text-[#A8A29E] text-xl">▾</span>
+        <span className="text-stone-400 text-xl">▾</span>
       </button>
     </header>
   );

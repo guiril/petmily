@@ -49,7 +49,7 @@ export const BottomSheet = ({
         }`}
       >
         <div className="relative h-12.5 px-4 pt-4 pb-3 mb-3 flex justify-center items-end shrink-0">
-          <span className="text-lg font-semibold leading-5.5 -tracking-[0.43px] text-[#0C0A09]">
+          <span className="text-lg font-semibold leading-5.5 -tracking-[0.43px] text-ink">
             篩選
           </span>
           <button
@@ -86,18 +86,18 @@ export const BottomSheet = ({
         </div>
       </div>
       <div
-        className={`pt-4 pb-8.5 px-4 gap-5 absolute inset-x-0 bottom-0 z-51 flex justify-center items-center border-t border-[#E7E5E4] bg-[#F5F5F4] transition-transform duration-300 ${
+        className={`pt-4 pb-8.5 px-4 gap-5 absolute inset-x-0 bottom-0 z-51 flex justify-center items-center border-t border-stone-200 bg-stone-100 transition-transform duration-300 ${
           isOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
         <button
           type="button"
-          className="text-[13px] leading-4.5 tracking-[0.2px] text-[#79716B] underline underline-offset-2 cursor-pointer"
+          className="text-[13px] leading-4.5 tracking-[0.2px] text-ink-muted underline underline-offset-2 cursor-pointer"
           onClick={onClearAllFilters}
         >
           全部清除
         </button>
-        <span className="py-3.5 flex-1 text-base font-semibold text-center text-[#0C0A09] bg-[#FFA940] rounded-[30px]">
+        <span className="py-3.5 flex-1 text-base font-semibold text-center text-ink bg-[#FFA940] rounded-[30px]">
           目前顯示 {filteredCount} 間店家
         </span>
       </div>

@@ -56,13 +56,13 @@ export const VenueCard = ({ venue }: VenueCardProps) => {
   const mapUrl = getMapUrl(venue);
 
   return (
-    <li className="flex flex-col border border-[#E7E5E4] bg-white rounded-2xl max-lg:h-35.25 max-lg:flex-row max-lg:rounded-xl">
+    <li className="flex flex-col border border-stone-200 bg-white rounded-2xl max-lg:h-35.25 max-lg:flex-row max-lg:rounded-xl">
       <div
         style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
         className={`relative h-46.25 bg-center bg-no-repeat rounded-t-2xl max-lg:w-[37.9%] max-lg:h-auto max-lg:rounded-xl ${
           imageUrl
             ? 'bg-cover'
-            : 'bg-[#F5F5F4] bg-[url(/images/logo-2.svg)] bg-size-[72px]'
+            : 'bg-stone-100 bg-[url(/images/logo-2.svg)] bg-size-[72px]'
         }`}
       >
         {petTypes.length > 0 && (
@@ -117,7 +117,7 @@ export const VenueCard = ({ venue }: VenueCardProps) => {
             href={mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="pt-2 pb-1.5 pr-3.5 pl-2 flex items-center gap-1 bg-[#F5F5F4] rounded-[100px] max-lg:px-3"
+            className="pt-2 pb-1.5 pr-3.5 pl-2 flex items-center gap-1 bg-stone-100 rounded-full max-lg:px-3"
           >
             <Image
               src="/images/location.svg"

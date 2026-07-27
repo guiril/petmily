@@ -31,7 +31,7 @@ export const Sidebar = ({
           篩選
         </p>
         <button
-          className="text-[13px] leading-4.5 tracking-[0.2px] text-[#A6A09B] cursor-pointer underline underline-offset-2 hover:brightness-75"
+          className="text-[13px] leading-4.5 tracking-[0.2px] text-ink-disabled cursor-pointer underline underline-offset-2 hover:brightness-75"
           onClick={onClearAllFilters}
         >
           全部清除

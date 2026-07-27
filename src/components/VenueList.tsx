@@ -42,7 +42,7 @@ export const VenueList = ({
           </p>
           <button
             onClick={onOpenSheet}
-            className="pl-2.5 pr-3 py-2 hidden justify-center items-center gap-1 bg-[#0C0A09] rounded-lg cursor-pointer max-lg:flex"
+            className="pl-2.5 pr-3 py-2 hidden justify-center items-center gap-1 bg-ink rounded-lg cursor-pointer max-lg:flex"
           >
             <Image src="/images/filter.svg" width={12} height={12} alt="" />
             <span className="text-xs text-white">篩選</span>

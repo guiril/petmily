@@ -26,7 +26,7 @@ export const CityModal = ({ isOpen, currentCity, onClose }: CityModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} panelClassName="max-w-4xl w-full">
       <div className="relative mb-4 flex items-center justify-center">
-        <DialogTitle className="text-lg font-semibold leading-5.5 -tracking-[0.43px] text-[#0C0A09]">
+        <DialogTitle className="text-lg font-semibold leading-5.5 -tracking-[0.43px] text-ink">
           選擇城市
         </DialogTitle>
         <button
