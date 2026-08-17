@@ -75,7 +75,7 @@ export const FilterModal = ({
           ))}
         </div>
       </div>
-      <div className="shrink-0 flex justify-center items-center gap-5 px-6 py-4 border-t border-stone-200 bg-stone-100">
+      <div className="shrink-0 flex justify-between items-center gap-5 px-6 py-4 border-t border-stone-200 bg-stone-100">
         <button
           type="button"
           className="text-[13px] leading-4.5 tracking-[0.2px] text-ink-muted underline underline-offset-2 cursor-pointer"
@@ -85,10 +85,9 @@ export const FilterModal = ({
         </button>
         <button
           type="button"
-          className="py-3.5 flex-1 max-w-70 text-base font-semibold text-center text-ink bg-[#FFA940] rounded-[30px] cursor-pointer"
-          onClick={onClose}
+          className="py-3.5 flex-1 text-base font-semibold text-center text-ink bg-[#FFA940] rounded-[30px]"
         >
-          顯示 {filteredCount} 間店家
+          目前顯示 {filteredCount} 間店家
         </button>
       </div>
     </Modal>
