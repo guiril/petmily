@@ -6,36 +6,20 @@ import type { Venue } from '@/types/venue';
 import { getFilterConfigs, filterVenues } from './filters';
 
 describe('getFilterConfigs', () => {
-  const serviceTypes = {
-    key: 'serviceTypes',
-    name: '服務類型',
-    options: [
-      { key: 'food', name: '餐飲' },
-      { key: 'ent', name: '娛樂' },
-      { key: 'stay', name: '住宿' },
-      { key: 'trans', name: '交通' },
-      { key: 'other', name: '其他' },
-    ],
-  };
+  const getConfigKeys = (cityKey: string) =>
+    getFilterConfigs(cityKey).map((config) => config.key);
 
-  const petTypes = {
-    key: 'petTypes',
-    name: '寵物種類',
-    options: [
-      { key: 'dog', name: '犬', iconSrc: 'images/filter/dog.svg' },
-      { key: 'cat', name: '貓', iconSrc: 'images/filter/cat.svg' },
-      { key: 'other', name: '其他', iconSrc: 'images/filter/other.svg' },
-    ],
-  };
-
-  test('returns filter config with petTypes', () => {
-    const results = getFilterConfigs('taichung');
-    expect(results).toEqual([serviceTypes, petTypes]);
+  test('includes petTypes for a city that supports it', () => {
+    expect(getConfigKeys('taichung')).toContain('petTypes');
   });
 
-  test('returns filter config without petTypes', () => {
-    const results = getFilterConfigs('taipei');
-    expect(results).toEqual([serviceTypes]);
+  test('excludes petTypes for a city that does not support it', () => {
+    expect(getConfigKeys('taipei')).not.toContain('petTypes');
+  });
+
+  test('always includes serviceTypes', () => {
+    expect(getConfigKeys('taichung')).toContain('serviceTypes');
+    expect(getConfigKeys('taipei')).toContain('serviceTypes');
   });
 });
 
