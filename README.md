@@ -33,4 +33,5 @@ Live site: [petmily-flame.vercel.app](https://petmily-flame.vercel.app)
 - **Tailwind CSS v4** — utility-first 響應式設計
 - **d3-geo + TopoJSON** — 繪製臺灣行政區 SVG 地圖
 - **Headless UI** — 使用 Modal 元件
+- **Vitest + Testing Library** — 單元測試涵蓋 pure function 與 custom hooks
 - **Vercel** — 部署與 Deploy Hook
