@@ -12,10 +12,6 @@
 
 Live site: [petmily-flame.vercel.app](https://petmily-flame.vercel.app)
 
-## 為什麼做這個專案
-
-寵物對現代多數人來說如同家人，帶寵物一起出去吃飯、旅遊越來越普遍。想帶寵物一起外出時，必須考量該場所是否允許寵物同行，但相關資訊分散在各個平台，難以系統化搜尋，因此希望做一個集中查詢的網站。
-
 ## 系統架構
 
 資料爬取、清洗與推送透過 GitHub Actions 自動化進行（爬蟲程式碼：[petmily-crawler](https://github.com/guiril/petmily-crawler)）。爬蟲推送更新後，Vercel Deploy Hook 會自動觸發重新部署，搭配 Next.js 的 force-cache 讓資料在 build 時期靜態化，使用者讀取時不需要再呼叫 API。
